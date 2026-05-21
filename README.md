@@ -89,3 +89,4 @@ Pushing to `main` triggers GitHub Actions:
 3. Build both apps
 4. Deploy frontend to Vercel
 5. Deploy backend to Render
+
