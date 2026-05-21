@@ -21,16 +21,8 @@ jobs:
           cache: npm
 
       # ── Install ──────────────────────────────────────────────────────────
-      - name: Install root dependencies
+      - name: Install dependencies
         run: npm ci
-
-      - name: Install API dependencies
-        run: npm ci
-        working-directory: apps/api
-
-      - name: Install Web dependencies
-        run: npm ci
-        working-directory: apps/web
 
       # ── Lint ─────────────────────────────────────────────────────────────
       - name: Lint API
