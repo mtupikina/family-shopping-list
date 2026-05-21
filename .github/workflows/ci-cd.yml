@@ -66,7 +66,6 @@ jobs:
       # ── Deploy frontend → Vercel ──────────────────────────────────────────
       - name: Deploy Web to Vercel
         run: npx vercel@latest --prod --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/web
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
