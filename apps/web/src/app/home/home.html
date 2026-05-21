@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'APP.TITLE' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="flex flex-col items-center justify-center min-h-full py-12">
+    @if (loading()) {
+      <div class="flex flex-col items-center gap-4">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p class="text-sm text-gray-500">{{ 'HOME.LOADING' | translate }}</p>
+      </div>
+    } @else {
+      <ion-card class="w-full max-w-sm shadow-md rounded-2xl">
+        <ion-card-content>
+          <p class="text-center text-lg font-medium text-gray-800 py-4">
+            {{ message() ?? ('HOME.FALLBACK' | translate) }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    }
+  </div>
+</ion-content>

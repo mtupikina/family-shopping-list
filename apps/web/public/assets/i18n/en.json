@@ -1,0 +1,9 @@
+{
+  "APP": {
+    "TITLE": "Family Shopping List"
+  },
+  "HOME": {
+    "LOADING": "Loading...",
+    "FALLBACK": "Welcome to the family shopping list"
+  }
+}

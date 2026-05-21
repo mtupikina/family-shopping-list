@@ -1,0 +1,21 @@
+{
+  "name": "family-shopping-list",
+  "private": true,
+  "workspaces": [
+    "apps/web",
+    "apps/api"
+  ],
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  },
+  "scripts": {
+    "lint:api": "npm run lint --workspace=apps/api",
+    "lint:web": "npm run lint --workspace=apps/web",
+    "lint": "npm run lint:api && npm run lint:web",
+    "test:api": "npm run test --workspace=apps/api",
+    "test:web": "npm run test --workspace=apps/web",
+    "test": "npm run test:api && npm run test:web",
+    "build:api": "npm run build --workspace=apps/api",
+    "build:web": "npm run build --workspace=apps/web"
+  }
+}

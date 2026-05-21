@@ -1,0 +1,82 @@
+name: CI / CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci-cd:
+    name: Lint, Test, Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # ── Install ──────────────────────────────────────────────────────────
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install API dependencies
+        run: npm ci
+        working-directory: apps/api
+
+      - name: Install Web dependencies
+        run: npm ci
+        working-directory: apps/web
+
+      # ── Lint ─────────────────────────────────────────────────────────────
+      - name: Lint API
+        run: npm run lint
+        working-directory: apps/api
+
+      - name: Lint Web
+        run: npm run lint
+        working-directory: apps/web
+
+      # ── Test ─────────────────────────────────────────────────────────────
+      - name: Test API
+        run: npm run test
+        working-directory: apps/api
+
+      - name: Test Web
+        run: npm run test -- --watch=false
+        working-directory: apps/web
+
+      # ── Build ─────────────────────────────────────────────────────────────
+      - name: Build API
+        run: npm run build
+        working-directory: apps/api
+
+      - name: Inject API_BASE_URL into environment.prod.ts
+        run: |
+          sed -i "s|%%API_BASE_URL%%|${{ secrets.API_BASE_URL }}|g" \
+            apps/web/src/environments/environment.prod.ts
+
+      - name: Build Web
+        run: npm run build
+        working-directory: apps/web
+
+      # ── Deploy backend → Render ──────────────────────────────────────────
+      - name: Deploy API to Render
+        run: |
+          curl -s -o /dev/null -w "%{http_code}" \
+            -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" | grep -q "^2"
+        shell: bash
+
+      # ── Deploy frontend → Vercel ──────────────────────────────────────────
+      - name: Deploy Web to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: --prod
+          working-directory: apps/web
