@@ -1,15 +1,10 @@
 // @ts-check
 const tseslint = require('typescript-eslint');
-const globals = require('globals');
 
 module.exports = tseslint.config(
   ...tseslint.configs.recommended,
   {
     languageOptions: {
-      globals: {
-        ...globals.node,
-        ...globals.jest,
-      },
       parserOptions: {
         project: true,
         tsconfigRootDir: __dirname,
