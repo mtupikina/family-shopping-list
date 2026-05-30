@@ -8,15 +8,16 @@ vi.mock('@ionic/angular/standalone', () => ({
   IonCard: class {},
   IonCardContent: class {},
   IonSpinner: class {},
+  IonText: class {},
   provideIonicAngular: () => [],
 }));
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { of } from 'rxjs';
+import { of, firstValueFrom } from 'rxjs';
 import { HomeComponent } from './home';
-import { WelcomeService } from '../services/welcome.service';
-import { provideTranslateService, TranslateLoader } from '@ngx-translate/core';
+import { MemberContextService } from '../members/member-context.service';
+import { provideTranslateService, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { of as rxOf } from 'rxjs';
 import { provideHttpClient } from '@angular/common/http';
 
@@ -24,7 +25,12 @@ class StubLoader implements TranslateLoader {
   getTranslation() {
     return rxOf({
       APP: { TITLE: 'Family Shopping List' },
-      HOME: { LOADING: 'Loading...', FALLBACK: 'Fallback' },
+      HOME: {
+        LOADING: 'Loading...',
+        FALLBACK: 'Fallback',
+        WELCOME: '{{username}} is welcoming you to the {{familyName}} shopping list',
+        OFFLINE: 'Offline',
+      },
     });
   }
 }
@@ -32,12 +38,28 @@ class StubLoader implements TranslateLoader {
 describe('HomeComponent', () => {
   let fixture: ComponentFixture<HomeComponent>;
 
-  const welcomeMock = {
-    getMessage: vi.fn().mockReturnValue(of('Test message')),
+  const memberContextMock = {
+    loadContext: vi.fn().mockReturnValue(
+      of({
+        username: 'Marta',
+        familyName: 'Smith Family',
+        memberId: 'member-1',
+        familyId: 'family-1',
+      }),
+    ),
+    isUsingCachedContext: vi.fn().mockReturnValue(false),
   };
 
   beforeEach(async () => {
-    welcomeMock.getMessage.mockReturnValue(of('Test message'));
+    memberContextMock.loadContext.mockReturnValue(
+      of({
+        username: 'Marta',
+        familyName: 'Smith Family',
+        memberId: 'member-1',
+        familyId: 'family-1',
+      }),
+    );
+    memberContextMock.isUsingCachedContext.mockReturnValue(false);
 
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
@@ -46,10 +68,13 @@ describe('HomeComponent', () => {
         provideTranslateService({
           loader: { provide: TranslateLoader, useClass: StubLoader },
         }),
-        { provide: WelcomeService, useValue: welcomeMock },
+        { provide: MemberContextService, useValue: memberContextMock },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
+
+    const translate = TestBed.inject(TranslateService);
+    await firstValueFrom(translate.use('en'));
 
     fixture = TestBed.createComponent(HomeComponent);
     fixture.detectChanges();
@@ -57,8 +82,9 @@ describe('HomeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('displays the message returned by WelcomeService', () => {
+  it('displays username and family name from member context', () => {
     const el: HTMLElement = fixture.nativeElement;
-    expect(el.textContent).toContain('Test message');
+    expect(el.textContent).toContain('Marta');
+    expect(el.textContent).toContain('Smith Family');
   });
 });

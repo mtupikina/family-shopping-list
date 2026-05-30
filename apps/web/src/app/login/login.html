@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{ 'LOGIN.TITLE' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="flex flex-col items-center justify-center min-h-full py-12">
+    @if (submitted()) {
+      <p class="text-center text-lg text-gray-800 max-w-sm">
+        {{ 'LOGIN.CHECK_EMAIL' | translate }}
+      </p>
+    } @else {
+      <form class="w-full max-w-sm flex flex-col gap-4" [formGroup]="form" (ngSubmit)="submit()">
+        <ion-item>
+          <ion-input
+            type="email"
+            formControlName="email"
+            [label]="'LOGIN.EMAIL' | translate"
+            labelPlacement="stacked"
+          ></ion-input>
+        </ion-item>
+
+        @if (error()) {
+          <ion-text color="danger">
+            <p class="text-sm">{{ error() | translate }}</p>
+          </ion-text>
+        }
+
+        <ion-button expand="block" type="submit" [disabled]="loading()">
+          {{ 'LOGIN.SUBMIT' | translate }}
+        </ion-button>
+      </form>
+    }
+  </div>
+</ion-content>

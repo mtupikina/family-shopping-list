@@ -4,6 +4,28 @@
   },
   "HOME": {
     "LOADING": "Ładowanie...",
-    "FALLBACK": "Witaj na rodzinnej liście zakupów"
+    "FALLBACK": "Witaj na rodzinnej liście zakupów",
+    "WELCOME": "{{username}} wita Cię w rodzinnej liście zakupów {{familyName}}",
+    "OFFLINE": "Jesteś offline. Wyświetlane są ostatnio zapisane dane."
+  },
+  "LOGIN": {
+    "TITLE": "Zaloguj się",
+    "EMAIL": "Adres e-mail",
+    "SUBMIT": "Wyślij link logowania",
+    "CHECK_EMAIL": "Sprawdź e-mail — wysłaliśmy link do logowania.",
+    "ERROR": "Nie udało się wysłać linku. Spróbuj ponownie."
+  },
+  "VERIFY": {
+    "TITLE": "Logowanie",
+    "LOADING": "Weryfikacja linku...",
+    "ERROR": "Ten link jest nieprawidłowy lub wygasł."
+  },
+  "ONBOARDING": {
+    "TITLE": "Utwórz rodzinę",
+    "SUBTITLE": "Skonfiguruj rodzinę i sposób, w jaki jesteś widoczny/a w aplikacji.",
+    "FAMILY_NAME": "Nazwa rodziny",
+    "USERNAME": "Twoje imię",
+    "SUBMIT": "Kontynuuj",
+    "ERROR": "Nie udało się utworzyć rodziny. Spróbuj ponownie."
   }
 }

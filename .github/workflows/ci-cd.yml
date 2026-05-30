@@ -37,15 +37,65 @@ jobs:
       - name: Test API
         run: npm run test
         working-directory: apps/api
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_DEV }}
+          JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET_DEV }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET_DEV }}
+          APP_WEB_URL: http://localhost:4200
+          ALLOWED_ORIGIN: http://localhost:4200
 
       - name: Test Web
         run: npm run test -- --watch=false
         working-directory: apps/web
 
       # ── Build ─────────────────────────────────────────────────────────────
+      - name: Generate Prisma client
+        run: npm run prisma:generate
+        working-directory: apps/api
+
       - name: Build API
         run: npm run build
         working-directory: apps/api
+
+      - name: Migrate production database
+        run: npm run prisma:migrate:deploy
+        working-directory: apps/api
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
+
+      - name: Sync Render environment variables
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
+          JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET_PROD }}
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET_PROD }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_FROM: ${{ vars.EMAIL_FROM }}
+          APP_WEB_URL: ${{ vars.APP_WEB_URL_PROD }}
+          ALLOWED_ORIGIN: ${{ vars.ALLOWED_ORIGIN_PROD }}
+        run: |
+          curl -s -f -X PUT \
+            -H "Authorization: Bearer ${RENDER_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "$(jq -n \
+              --arg db "$DATABASE_URL" \
+              --arg access "$JWT_ACCESS_SECRET" \
+              --arg refresh "$JWT_REFRESH_SECRET" \
+              --arg resend "$RESEND_API_KEY" \
+              --arg emailFrom "$EMAIL_FROM" \
+              --arg appWeb "$APP_WEB_URL" \
+              --arg origin "$ALLOWED_ORIGIN" \
+              '[
+                {key: "DATABASE_URL", value: $db},
+                {key: "JWT_ACCESS_SECRET", value: $access},
+                {key: "JWT_REFRESH_SECRET", value: $refresh},
+                {key: "RESEND_API_KEY", value: $resend},
+                {key: "EMAIL_FROM", value: $emailFrom},
+                {key: "APP_WEB_URL", value: $appWeb},
+                {key: "ALLOWED_ORIGIN", value: $origin}
+              ]')" \
+            "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/env-vars"
 
       - name: Inject API_BASE_URL into environment.prod.ts
         run: |

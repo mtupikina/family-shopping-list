@@ -4,6 +4,28 @@
   },
   "HOME": {
     "LOADING": "Loading...",
-    "FALLBACK": "Welcome to the family shopping list"
+    "FALLBACK": "Welcome to the family shopping list",
+    "WELCOME": "{{username}} is welcoming you to the {{familyName}} shopping list",
+    "OFFLINE": "You are offline. Showing last saved data."
+  },
+  "LOGIN": {
+    "TITLE": "Sign in",
+    "EMAIL": "Email address",
+    "SUBMIT": "Send magic link",
+    "CHECK_EMAIL": "Check your email for a sign-in link.",
+    "ERROR": "Could not send sign-in link. Please try again."
+  },
+  "VERIFY": {
+    "TITLE": "Signing in",
+    "LOADING": "Verifying your link...",
+    "ERROR": "This sign-in link is invalid or has expired."
+  },
+  "ONBOARDING": {
+    "TITLE": "Create your family",
+    "SUBTITLE": "Set up your family and how you appear in the app.",
+    "FAMILY_NAME": "Family name",
+    "USERNAME": "Your name",
+    "SUBMIT": "Continue",
+    "ERROR": "Could not create your family. Please try again."
   }
 }

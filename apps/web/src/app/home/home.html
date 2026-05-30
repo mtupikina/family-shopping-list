@@ -6,16 +6,24 @@
 
 <ion-content class="ion-padding">
   <div class="flex flex-col items-center justify-center min-h-full py-12">
+    @if (offline()) {
+      <ion-text color="warning">
+        <p class="text-sm text-center mb-4">{{ 'HOME.OFFLINE' | translate }}</p>
+      </ion-text>
+    }
+
     @if (loading()) {
       <div class="flex flex-col items-center gap-4">
         <ion-spinner name="crescent" color="primary"></ion-spinner>
         <p class="text-sm text-gray-500">{{ 'HOME.LOADING' | translate }}</p>
       </div>
+    } @else if (error()) {
+      <p class="text-center text-gray-600">{{ 'HOME.FALLBACK' | translate }}</p>
     } @else {
       <ion-card class="w-full max-w-sm shadow-md rounded-2xl">
         <ion-card-content>
           <p class="text-center text-lg font-medium text-gray-800 py-4">
-            {{ message() ?? ('HOME.FALLBACK' | translate) }}
+            {{ welcomeMessage() }}
           </p>
         </ion-card-content>
       </ion-card>
