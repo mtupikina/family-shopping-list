@@ -31,6 +31,8 @@ describe('MemberContextService', () => {
     service.loadContext().subscribe(context => {
       expect(context.username).toBe('Marta');
       expect(context.familyName).toBe('Smith Family');
+      expect(service.syncStatus()).toBe('offline');
+      expect(service.memberContext()).toEqual(context);
     });
   });
 

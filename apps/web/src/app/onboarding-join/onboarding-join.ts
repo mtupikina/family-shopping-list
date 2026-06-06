@@ -30,7 +30,6 @@ import { AppHeaderComponent } from '../shared/app-header/app-header';
     AppHeaderComponent,
   ],
   templateUrl: './onboarding-join.html',
-  styleUrl: './onboarding-join.scss',
 })
 export class OnboardingJoinComponent {
   private readonly fb = inject(FormBuilder);

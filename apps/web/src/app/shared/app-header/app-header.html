@@ -1,10 +1,33 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>{{ titleKey() | translate }}</ion-title>
-    @if (showFamilyLink()) {
-      <ion-buttons slot="end">
-        <ion-button routerLink="/family">{{ 'MENU.FAMILY' | translate }}</ion-button>
-      </ion-buttons>
-    }
+
+    <ion-buttons slot="start">
+      <ion-menu-button />
+    </ion-buttons>
+
+    <ion-title>
+      {{ titleKey() | translate }}
+    </ion-title>
+
+    <ion-buttons slot="end">
+
+      <ion-button fill="clear" [attr.aria-label]="connectivityLabel() | translate">
+        <ion-icon
+          [color]="connectivityColor()"
+          [name]="connectivityIcon()">
+        </ion-icon>
+      </ion-button>
+
+      <ion-button
+        fill="clear"
+        [attr.aria-label]="syncLabel() | translate">
+        <ion-icon
+          name="sync-outline"
+          [class.animate-spin]="syncSpinning()">
+        </ion-icon>
+      </ion-button>
+
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>

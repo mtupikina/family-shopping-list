@@ -31,7 +31,6 @@ interface InvitePreview {
     AppHeaderComponent,
   ],
   templateUrl: './join.html',
-  styleUrl: './join.scss',
 })
 export class JoinComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

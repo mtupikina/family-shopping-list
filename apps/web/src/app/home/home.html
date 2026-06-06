@@ -1,13 +1,7 @@
-<app-header [showFamilyLink]="true"></app-header>
+<app-header></app-header>
 
 <ion-content class="ion-padding">
   <div class="flex flex-col items-center justify-center min-h-full py-12">
-    @if (offline()) {
-      <ion-text color="warning">
-        <p class="text-sm text-center mb-4">{{ 'HOME.OFFLINE' | translate }}</p>
-      </ion-text>
-    }
-
     @if (loading()) {
       <div class="flex flex-col items-center gap-4">
         <ion-spinner name="crescent" color="primary"></ion-spinner>

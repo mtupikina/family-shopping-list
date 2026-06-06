@@ -29,7 +29,6 @@ import { AuthService } from '../auth/auth.service';
     TranslatePipe,
   ],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
 })
 export class LoginComponent {
   private readonly auth = inject(AuthService);

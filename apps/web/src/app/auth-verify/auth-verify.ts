@@ -24,7 +24,6 @@ import { AuthService } from '../auth/auth.service';
     TranslatePipe,
   ],
   templateUrl: './auth-verify.html',
-  styleUrl: './auth-verify.scss',
 })
 export class AuthVerifyComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

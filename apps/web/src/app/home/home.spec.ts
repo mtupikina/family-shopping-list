@@ -6,16 +6,17 @@ vi.mock('@ionic/angular/standalone', () => ({
   IonTitle: class {},
   IonButtons: class {},
   IonButton: class {},
+  IonIcon: class {},
+  IonMenuButton: class {},
   IonContent: class {},
   IonCard: class {},
   IonCardContent: class {},
   IonSpinner: class {},
-  IonText: class {},
   provideIonicAngular: () => [],
 }));
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { of, firstValueFrom } from 'rxjs';
 import { HomeComponent } from './home';
@@ -32,7 +33,6 @@ class StubLoader implements TranslateLoader {
         LOADING: 'Loading...',
         FALLBACK: 'Fallback',
         WELCOME: '{{username}} is welcoming you to the {{familyName}} shopping list',
-        OFFLINE: 'Offline',
       },
     });
   }
@@ -51,6 +51,13 @@ describe('HomeComponent', () => {
       }),
     ),
     isUsingCachedContext: vi.fn().mockReturnValue(false),
+    syncStatus: signal('synced'),
+    memberContext: signal({
+      username: 'Marta',
+      familyName: 'Smith Family',
+      memberId: 'member-1',
+      familyId: 'family-1',
+    }),
   };
 
   beforeEach(async () => {

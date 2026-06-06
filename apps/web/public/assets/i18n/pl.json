@@ -5,8 +5,7 @@
   "HOME": {
     "LOADING": "Ładowanie...",
     "FALLBACK": "Witaj na rodzinnej liście zakupów",
-    "WELCOME": "{{username}} wita Cię w rodzinnej liście zakupów {{familyName}}",
-    "OFFLINE": "Jesteś offline. Wyświetlane są ostatnio zapisane dane."
+    "WELCOME": "{{username}} wita Cię w rodzinnej liście zakupów {{familyName}}"
   },
   "LOGIN": {
     "TITLE": "Zaloguj się",
@@ -53,7 +52,16 @@
     "ERROR_ALREADY_MEMBER": "Ten adres e-mail należy już do członka rodziny.",
     "ERROR_PENDING_INVITE": "Zaproszenie na ten adres e-mail zostało już wysłane."
   },
-  "MENU": {
-    "FAMILY": "Rodzina"
+  "HEADER": {
+    "HOME": "Strona główna",
+    "FAMILY": "Rodzina",
+    "SIGN_OUT": "Wyloguj się",
+    "STATUS": {
+      "ONLINE": "Online",
+      "SYNCED": "Aktualne",
+      "SYNCING": "Synchronizacja…",
+      "OFFLINE": "Offline · wyświetlane zapisane dane",
+      "PENDING": "Brak połączenia z serwerem · wyświetlane zapisane dane"
+    }
   }
 }

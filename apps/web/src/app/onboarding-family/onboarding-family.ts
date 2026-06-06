@@ -34,7 +34,6 @@ import { AuthTokensResponse } from '../auth/auth.types';
     TranslatePipe,
   ],
   templateUrl: './onboarding-family.html',
-  styleUrl: './onboarding-family.scss',
 })
 export class OnboardingFamilyComponent {
   private readonly fb = inject(FormBuilder);

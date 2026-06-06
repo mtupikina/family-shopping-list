@@ -27,7 +27,6 @@ import { AppHeaderComponent } from '../shared/app-header/app-header';
     AppHeaderComponent,
   ],
   templateUrl: './family.html',
-  styleUrl: './family.scss',
 })
 export class FamilyComponent {
   private readonly fb = inject(FormBuilder);

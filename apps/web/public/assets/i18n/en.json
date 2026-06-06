@@ -5,8 +5,7 @@
   "HOME": {
     "LOADING": "Loading...",
     "FALLBACK": "Welcome to the family shopping list",
-    "WELCOME": "{{username}} is welcoming you to the {{familyName}} shopping list",
-    "OFFLINE": "You are offline. Showing last saved data."
+    "WELCOME": "{{username}} is welcoming you to the {{familyName}} shopping list"
   },
   "LOGIN": {
     "TITLE": "Sign in",
@@ -53,7 +52,16 @@
     "ERROR_ALREADY_MEMBER": "This email is already a member of a family.",
     "ERROR_PENDING_INVITE": "An invitation has already been sent to this email."
   },
-  "MENU": {
-    "FAMILY": "Family"
+  "HEADER": {
+    "HOME": "Home",
+    "FAMILY": "Family",
+    "SIGN_OUT": "Sign out",
+    "STATUS": {
+      "ONLINE": "Online",
+      "SYNCED": "Up to date",
+      "SYNCING": "Syncing…",
+      "OFFLINE": "Offline · showing saved data",
+      "PENDING": "Can't reach server · showing saved data"
+    }
   }
 }
