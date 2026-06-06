@@ -27,5 +27,33 @@
     "USERNAME": "Your name",
     "SUBMIT": "Continue",
     "ERROR": "Could not create your family. Please try again."
+  },
+  "ONBOARDING_JOIN": {
+    "TITLE": "Join your family",
+    "SUBTITLE": "Choose how you appear in the app.",
+    "USERNAME": "Your name",
+    "SUBMIT": "Continue",
+    "ERROR": "Could not join the family. Please try again."
+  },
+  "JOIN": {
+    "TITLE": "Join family",
+    "SUBTITLE": "You have been invited to join {{familyName}}.",
+    "SUBMIT": "Send sign-in link",
+    "CHECK_EMAIL": "Check your email for a sign-in link.",
+    "ERROR_INVALID": "This invitation is invalid or has expired.",
+    "ERROR_SEND": "Could not send sign-in link. Please try again."
+  },
+  "FAMILY": {
+    "TITLE": "Family",
+    "SUBTITLE": "Invite someone to join your family shopping list.",
+    "EMAIL": "Email address",
+    "SUBMIT": "Send invitation",
+    "SUCCESS": "Invitation sent to {{email}}.",
+    "ERROR_GENERIC": "Could not send invitation. Please try again.",
+    "ERROR_ALREADY_MEMBER": "This email is already a member of a family.",
+    "ERROR_PENDING_INVITE": "An invitation has already been sent to this email."
+  },
+  "MENU": {
+    "FAMILY": "Family"
   }
 }

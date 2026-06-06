@@ -8,10 +8,11 @@ datasource db {
 }
 
 model Family {
-  id        String   @id @default(uuid())
+  id        String         @id @default(uuid())
   name      String
-  createdAt DateTime @default(now())
+  createdAt DateTime       @default(now())
   members   Member[]
+  invites   FamilyInvite[]
 }
 
 model Member {
@@ -24,13 +25,31 @@ model Member {
   refreshTokens RefreshToken[]
 }
 
+model FamilyInvite {
+  id         String           @id @default(uuid())
+  familyId   String
+  family     Family           @relation(fields: [familyId], references: [id])
+  email      String
+  invitedBy  String
+  tokenHash  String           @unique
+  expiresAt  DateTime
+  acceptedAt DateTime?
+  revokedAt  DateTime?
+  createdAt  DateTime         @default(now())
+  magicLinks MagicLinkToken[]
+
+  @@index([familyId, email])
+}
+
 model MagicLinkToken {
-  id        String    @id @default(uuid())
+  id        String        @id @default(uuid())
   email     String
-  tokenHash String    @unique
+  tokenHash String        @unique
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime  @default(now())
+  createdAt DateTime      @default(now())
+  inviteId  String?
+  invite    FamilyInvite? @relation(fields: [inviteId], references: [id])
 }
 
 model RefreshToken {

@@ -1,0 +1,37 @@
+<app-header titleKey="JOIN.TITLE"></app-header>
+
+<ion-content class="ion-padding">
+  <div class="flex flex-col items-center justify-center min-h-full py-12">
+    @if (loading()) {
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+    } @else if (error() && !preview()) {
+      <div class="w-full max-w-sm flex flex-col gap-4 text-center">
+        <ion-text color="danger">
+          <p class="text-sm">{{ error() | translate }}</p>
+        </ion-text>
+        <ion-button routerLink="/login" expand="block">{{ 'LOGIN.TITLE' | translate }}</ion-button>
+      </div>
+    } @else if (submitted()) {
+      <p class="text-center text-lg text-gray-800 max-w-sm">
+        {{ 'JOIN.CHECK_EMAIL' | translate }}
+      </p>
+    } @else if (preview(); as invite) {
+      <div class="w-full max-w-sm flex flex-col gap-4">
+        <p class="text-sm text-gray-600 text-center">
+          {{ 'JOIN.SUBTITLE' | translate: { familyName: invite.familyName } }}
+        </p>
+        <p class="text-center text-gray-800">{{ invite.email }}</p>
+
+        @if (error()) {
+          <ion-text color="danger">
+            <p class="text-sm">{{ error() | translate }}</p>
+          </ion-text>
+        }
+
+        <ion-button expand="block" [disabled]="submitting()" (click)="sendMagicLink()">
+          {{ 'JOIN.SUBMIT' | translate }}
+        </ion-button>
+      </div>
+    }
+  </div>
+</ion-content>

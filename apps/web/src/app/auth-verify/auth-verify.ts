@@ -49,7 +49,7 @@ export class AuthVerifyComponent implements OnInit {
   private async verify(token: string): Promise<void> {
     try {
       const response = await this.auth.verifyMagicLink(token);
-      await this.router.navigateByUrl(response.needsOnboarding ? '/onboarding/family' : '/');
+      await this.router.navigateByUrl(response.needsOnboarding ? this.auth.getOnboardingPath() : '/');
     } catch {
       this.loading.set(false);
       this.error.set('VERIFY.ERROR');

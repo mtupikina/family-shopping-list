@@ -24,7 +24,7 @@ export const authGuard: CanActivateFn = async () => {
   }
 
   if (destination === 'onboarding') {
-    return router.createUrlTree(['/onboarding/family']);
+    return router.createUrlTree([auth.getOnboardingPath()]);
   }
 
   return true;
@@ -41,7 +41,7 @@ export const guestGuard: CanActivateFn = async () => {
   }
 
   if (destination === 'onboarding') {
-    return router.createUrlTree(['/onboarding/family']);
+    return router.createUrlTree([auth.getOnboardingPath()]);
   }
 
   return true;
@@ -61,6 +61,33 @@ export const onboardingGuard: CanActivateFn = async () => {
 
   if (!auth.needsOnboarding()) {
     return router.createUrlTree(['/']);
+  }
+
+  if (auth.onboardingKind() === 'join') {
+    return router.createUrlTree(['/onboarding/join']);
+  }
+
+  return true;
+};
+
+export const joinOnboardingGuard: CanActivateFn = async () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  if (!auth.accessToken && auth.hasRefreshToken() && navigator.onLine) {
+    await auth.refreshAccessToken();
+  }
+
+  if (!auth.accessToken) {
+    return router.createUrlTree(['/login']);
+  }
+
+  if (!auth.needsOnboarding()) {
+    return router.createUrlTree(['/']);
+  }
+
+  if (auth.onboardingKind() !== 'join') {
+    return router.createUrlTree(['/onboarding/family']);
   }
 
   return true;

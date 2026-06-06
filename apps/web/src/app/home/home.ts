@@ -1,8 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonCard,
   IonCardContent,
@@ -12,20 +9,19 @@ import {
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MemberContextService } from '../members/member-context.service';
 import { MemberContext } from '../auth/auth.types';
+import { AppHeaderComponent } from '../shared/app-header/app-header';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonCard,
     IonCardContent,
     IonSpinner,
     IonText,
     TranslatePipe,
+    AppHeaderComponent,
   ],
   templateUrl: './home.html',
   styleUrl: './home.scss',

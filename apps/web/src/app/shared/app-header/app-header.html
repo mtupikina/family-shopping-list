@@ -1,0 +1,10 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{ titleKey() | translate }}</ion-title>
+    @if (showFamilyLink()) {
+      <ion-buttons slot="end">
+        <ion-button routerLink="/family">{{ 'MENU.FAMILY' | translate }}</ion-button>
+      </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>

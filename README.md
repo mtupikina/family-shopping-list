@@ -6,7 +6,7 @@ A shared shopping list for the whole family. Built as a PWA (installable from th
 
 - **Frontend:** Angular + Ionic + Tailwind CSS, hosted on Vercel
 - **Backend:** NestJS + Prisma + PostgreSQL, hosted on Render
-- **Auth:** Email magic links (Resend)
+- **Auth:** Email magic links (Brevo)
 - **i18n:** English, Polish, Ukrainian (auto-detected from device language)
 - **Offline:** Service worker caches app shell; member context cached in localStorage
 
@@ -58,7 +58,70 @@ npm run start:dev
 # API available at http://localhost:3000
 ```
 
-Magic links are logged to the API console when `RESEND_API_KEY` is not set.
+Magic links and invite emails are logged to the API console when `BREVO_API_KEY` is not set.
+
+### Brevo setup (email)
+
+The app uses [Brevo](https://www.brevo.com) (free tier: 300 emails/day) for magic-link login and family invite emails. No custom domain required — verify a sender email you own (e.g. your Gmail).
+
+#### 1. Create a Brevo account
+
+1. Go to [https://www.brevo.com](https://www.brevo.com) and click **Sign up free**.
+2. Register with your email (e.g. `you@gmail.com`). No credit card required.
+3. Complete email confirmation if Brevo sends one.
+4. Log in to the Brevo dashboard.
+
+#### 2. Verify a sender email
+
+Brevo will only send mail from addresses you have verified.
+
+1. In the left sidebar, open **Settings** (gear) → **Senders, domains & dedicated IPs** → **Senders**  
+   (or go to [https://app.brevo.com/senders](https://app.brevo.com/senders))
+2. Click **Add a sender**.
+3. Enter:
+   - **From name:** `Family Shopping List` (or any name)
+   - **From email:** the Gmail (or other) address you want emails to come from — must be an inbox you can open
+4. Click **Save**.
+5. Brevo sends a verification email to that address. Open it and click the confirmation link.
+6. Wait until the sender status shows **Verified**.
+
+Use this exact email in `EMAIL_FROM` locally and in GitHub Variables.
+
+#### 3. Create an API key
+
+1. In the sidebar, open **Settings** → **SMTP & API** → **API keys & MCP**  
+   (or [https://app.brevo.com/settings/keys/api](https://app.brevo.com/settings/keys/api))
+2. Click **Generate a new API key**.
+3. Name it e.g. `family-shopping-list-local`.
+4. Copy the key immediately (shown once). It looks like `xkeysib-...`.
+5. For production, create a separate key (e.g. `family-shopping-list-prod`) and store it as the GitHub secret `BREVO_API_KEY`.
+
+#### 4. Configure the API
+
+In `apps/api/.env`:
+
+```env
+BREVO_API_KEY=xkeysib-your-key-here
+EMAIL_FROM=Family Shopping List <you@gmail.com>
+```
+
+`EMAIL_FROM` must use the **same email** you verified in step 2.
+
+Restart `npm run start:dev` after changing `.env`.
+
+#### 5. GitHub (production)
+
+- **Secret:** `BREVO_API_KEY` — your production API key (replace old `RESEND_API_KEY` if present)
+- **Variable:** `EMAIL_FROM` — e.g. `Family Shopping List <you@gmail.com>`
+
+#### Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| `401` / invalid API key | Regenerate key; check no extra spaces in `.env` |
+| Sender not verified | Finish step 2; `EMAIL_FROM` must match verified sender |
+| Email not received | Check spam; confirm recipient under 300/day limit |
+| Local dev without Brevo | Leave `BREVO_API_KEY` empty; links print in API terminal |
 
 ### Run the frontend
 
@@ -83,8 +146,8 @@ See [`apps/api/.env.example`](apps/api/.env.example). Key variables:
 | `JWT_REFRESH_SECRET` | Used for refresh token storage validation |
 | `APP_WEB_URL` | Frontend URL for magic links (`http://localhost:4200` locally) |
 | `ALLOWED_ORIGIN` | CORS origin (`http://localhost:4200` locally) |
-| `RESEND_API_KEY` | Optional locally; omit to log magic links to console |
-| `EMAIL_FROM` | Sender address for magic-link emails |
+| `BREVO_API_KEY` | Optional locally; omit to log magic links / invite links to console |
+| `EMAIL_FROM` | Verified Brevo sender, e.g. `Family Shopping List <you@gmail.com>` |
 
 Production values are synced from GitHub Actions to Render on each deploy.
 
@@ -98,7 +161,7 @@ Locally it defaults to `http://localhost:3000` in `environment.ts`.
 1. Create **two Render PostgreSQL** databases:
    - `fsl-dev` — used locally and in CI tests
    - `fsl-prod` — used in production
-2. Create a **Resend** account (free tier) and verify a sender address
+2. Create a **Brevo** account (free tier) and verify a sender email — see [Brevo setup](#brevo-setup-email) above
 3. Add GitHub secrets and variables (see below)
 4. Get `RENDER_API_KEY` and `RENDER_SERVICE_ID` from the Render dashboard
 
@@ -126,13 +189,13 @@ Set these in your GitHub repository → Settings → Secrets and variables → A
 | `JWT_ACCESS_SECRET_PROD` | Prod JWT access secret |
 | `JWT_REFRESH_SECRET_DEV` | Dev JWT refresh secret |
 | `JWT_REFRESH_SECRET_PROD` | Prod JWT refresh secret |
-| `RESEND_API_KEY` | Resend API key for magic-link emails |
+| `BREVO_API_KEY` | Brevo API key for magic-link and invite emails |
 
 ### Variables
 
 | Variable | Purpose |
 |----------|---------|
-| `EMAIL_FROM` | e.g. `Family List <noreply@yourdomain.com>` |
+| `EMAIL_FROM` | Verified sender, e.g. `Family Shopping List <you@gmail.com>` |
 | `APP_WEB_URL_PROD` | Production Vercel URL |
 | `ALLOWED_ORIGIN_PROD` | Same as production Vercel URL |
 

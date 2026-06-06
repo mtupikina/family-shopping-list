@@ -2,6 +2,7 @@ export interface AuthTokensResponse {
   accessToken: string;
   refreshToken?: string;
   needsOnboarding: boolean;
+  onboardingKind?: 'create' | 'join';
 }
 
 export interface MemberContext {

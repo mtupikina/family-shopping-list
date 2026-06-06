@@ -1,8 +1,13 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class RequestMagicLinkDto {
   @IsEmail()
   email!: string;
+
+  @IsOptional()
+  @IsString()
+  @IsNotEmpty()
+  inviteToken?: string;
 }
 
 export class RefreshTokenDto {

@@ -15,6 +15,7 @@ export class AuthService {
 
   private readonly accessTokenSignal = signal<string | null>(null);
   readonly needsOnboarding = signal(false);
+  readonly onboardingKind = signal<'create' | 'join' | null>(null);
 
   get accessToken(): string | null {
     return this.accessTokenSignal();
@@ -31,6 +32,7 @@ export class AuthService {
   setSession(tokens: AuthTokensResponse): void {
     this.accessTokenSignal.set(tokens.accessToken);
     this.needsOnboarding.set(tokens.needsOnboarding);
+    this.onboardingKind.set(tokens.needsOnboarding ? (tokens.onboardingKind ?? 'create') : null);
 
     if (tokens.refreshToken) {
       try {
@@ -44,6 +46,7 @@ export class AuthService {
   clearSession(): void {
     this.accessTokenSignal.set(null);
     this.needsOnboarding.set(false);
+    this.onboardingKind.set(null);
 
     try {
       localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -52,10 +55,17 @@ export class AuthService {
     }
   }
 
-  async requestMagicLink(email: string): Promise<void> {
+  async requestMagicLink(email: string, inviteToken?: string): Promise<void> {
     await firstValueFrom(
-      this.http.post(`${environment.apiBaseUrl}/auth/magic-link`, { email }),
+      this.http.post(`${environment.apiBaseUrl}/auth/magic-link`, {
+        email,
+        ...(inviteToken ? { inviteToken } : {}),
+      }),
     );
+  }
+
+  getOnboardingPath(): string {
+    return this.onboardingKind() === 'join' ? '/onboarding/join' : '/onboarding/family';
   }
 
   async verifyMagicLink(token: string): Promise<AuthTokensResponse> {

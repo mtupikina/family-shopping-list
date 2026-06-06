@@ -70,7 +70,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
           JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET_PROD }}
           JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET_PROD }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
           EMAIL_FROM: ${{ vars.EMAIL_FROM }}
           APP_WEB_URL: ${{ vars.APP_WEB_URL_PROD }}
           ALLOWED_ORIGIN: ${{ vars.ALLOWED_ORIGIN_PROD }}
@@ -82,7 +82,7 @@ jobs:
               --arg db "$DATABASE_URL" \
               --arg access "$JWT_ACCESS_SECRET" \
               --arg refresh "$JWT_REFRESH_SECRET" \
-              --arg resend "$RESEND_API_KEY" \
+              --arg brevo "$BREVO_API_KEY" \
               --arg emailFrom "$EMAIL_FROM" \
               --arg appWeb "$APP_WEB_URL" \
               --arg origin "$ALLOWED_ORIGIN" \
@@ -90,7 +90,7 @@ jobs:
                 {key: "DATABASE_URL", value: $db},
                 {key: "JWT_ACCESS_SECRET", value: $access},
                 {key: "JWT_REFRESH_SECRET", value: $refresh},
-                {key: "RESEND_API_KEY", value: $resend},
+                {key: "BREVO_API_KEY", value: $brevo},
                 {key: "EMAIL_FROM", value: $emailFrom},
                 {key: "APP_WEB_URL", value: $appWeb},
                 {key: "ALLOWED_ORIGIN", value: $origin}

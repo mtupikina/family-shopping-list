@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../email/email.service';
+import { InvitesService } from '../invites/invites.service';
 import { hashToken } from '../common/token.util';
 
 describe('AuthService', () => {
@@ -24,6 +25,10 @@ describe('AuthService', () => {
   };
   let jwtService: { sign: jest.Mock; signAsync: jest.Mock };
   let emailService: { sendMagicLink: jest.Mock };
+  let invitesService: {
+    validateInviteForMagicLink: jest.Mock;
+    findValidInviteById: jest.Mock;
+  };
 
   beforeEach(() => {
     prisma = {
@@ -50,6 +55,17 @@ describe('AuthService', () => {
       sendMagicLink: jest.fn().mockResolvedValue(undefined),
     };
 
+    invitesService = {
+      validateInviteForMagicLink: jest.fn().mockResolvedValue({
+        id: 'invite-1',
+        familyId: 'family-1',
+      }),
+      findValidInviteById: jest.fn().mockResolvedValue({
+        id: 'invite-1',
+        familyId: 'family-1',
+      }),
+    };
+
     const config = {
       get: jest.fn((key: string, fallback?: string) => {
         const values: Record<string, string> = {
@@ -66,6 +82,7 @@ describe('AuthService', () => {
       jwtService as unknown as JwtService,
       config as unknown as ConfigService,
       emailService as unknown as EmailService,
+      invitesService as unknown as InvitesService,
     );
   });
 
@@ -114,14 +131,49 @@ describe('AuthService', () => {
       email: 'new@example.com',
       usedAt: null,
       expiresAt: new Date(Date.now() + 60_000),
+      inviteId: null,
     });
     prisma.member.findUnique.mockResolvedValue(null);
 
     const result = await service.verifyMagicLink('raw-token');
 
     expect(result.needsOnboarding).toBe(true);
+    expect(result.onboardingKind).toBe('create');
     expect(result.accessToken).toBe('pending-token');
     expect(result.refreshToken).toBeUndefined();
+  });
+
+  it('stores inviteId when requesting magic link with invite token', async () => {
+    await service.requestMagicLink('partner@example.com', 'invite-raw');
+
+    expect(invitesService.validateInviteForMagicLink).toHaveBeenCalledWith(
+      'invite-raw',
+      'partner@example.com',
+    );
+    expect(prisma.magicLinkToken.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          inviteId: 'invite-1',
+        }),
+      }),
+    );
+  });
+
+  it('verifies invite-bound magic link with join onboarding', async () => {
+    prisma.magicLinkToken.findUnique.mockResolvedValue({
+      id: '1',
+      email: 'partner@example.com',
+      usedAt: null,
+      expiresAt: new Date(Date.now() + 60_000),
+      inviteId: 'invite-1',
+    });
+    prisma.member.findUnique.mockResolvedValue(null);
+
+    const result = await service.verifyMagicLink('raw-token');
+
+    expect(invitesService.findValidInviteById).toHaveBeenCalledWith('invite-1');
+    expect(result.needsOnboarding).toBe(true);
+    expect(result.onboardingKind).toBe('join');
   });
 
   it('rejects invalid magic link', async () => {

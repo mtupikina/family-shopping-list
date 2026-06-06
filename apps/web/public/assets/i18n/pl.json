@@ -27,5 +27,33 @@
     "USERNAME": "Twoje imię",
     "SUBMIT": "Kontynuuj",
     "ERROR": "Nie udało się utworzyć rodziny. Spróbuj ponownie."
+  },
+  "ONBOARDING_JOIN": {
+    "TITLE": "Dołącz do rodziny",
+    "SUBTITLE": "Wybierz, jak jesteś widoczny/a w aplikacji.",
+    "USERNAME": "Twoje imię",
+    "SUBMIT": "Kontynuuj",
+    "ERROR": "Nie udało się dołączyć do rodziny. Spróbuj ponownie."
+  },
+  "JOIN": {
+    "TITLE": "Dołącz do rodziny",
+    "SUBTITLE": "Zostałeś/aś zaproszony/a do rodziny {{familyName}}.",
+    "SUBMIT": "Wyślij link logowania",
+    "CHECK_EMAIL": "Sprawdź e-mail — wysłaliśmy link do logowania.",
+    "ERROR_INVALID": "To zaproszenie jest nieprawidłowe lub wygasło.",
+    "ERROR_SEND": "Nie udało się wysłać linku. Spróbuj ponownie."
+  },
+  "FAMILY": {
+    "TITLE": "Rodzina",
+    "SUBTITLE": "Zaproś kogoś do wspólnej listy zakupów.",
+    "EMAIL": "Adres e-mail",
+    "SUBMIT": "Wyślij zaproszenie",
+    "SUCCESS": "Zaproszenie wysłane na {{email}}.",
+    "ERROR_GENERIC": "Nie udało się wysłać zaproszenia. Spróbuj ponownie.",
+    "ERROR_ALREADY_MEMBER": "Ten adres e-mail należy już do członka rodziny.",
+    "ERROR_PENDING_INVITE": "Zaproszenie na ten adres e-mail zostało już wysłane."
+  },
+  "MENU": {
+    "FAMILY": "Rodzina"
   }
 }

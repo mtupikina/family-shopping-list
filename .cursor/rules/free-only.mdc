@@ -1,0 +1,30 @@
+---
+description: App must stay 100% free — no paid services or upgrades
+alwaysApply: true
+---
+
+# 100% Free — No Paid Solutions
+
+This app must remain **100% free** now and in the future.
+
+## Do
+
+- Prefer free tiers of services (Render free, Vercel free, Neon free, Brevo free).
+- For local dev email: omit `BREVO_API_KEY` and log magic links / invite links to the API console.
+- Use Brevo with a verified sender email (e.g. Gmail) — no custom domain purchase required.
+- When a feature needs delivery to arbitrary emails, use Brevo or in-app link display — not paid domains.
+
+## Do not
+
+- Suggest buying domains, paid email plans, or any paid SaaS upgrade.
+- Suggest services that require payment now or are likely to require payment later for this use case.
+- Add dependencies with mandatory paid tiers for core flows (auth, invites, hosting, DB).
+
+## Examples
+
+```
+❌ "Buy a domain and verify it in Resend"
+❌ "Upgrade to a paid email plan"
+✅ "Leave BREVO_API_KEY empty locally; copy links from the API terminal"
+✅ "Verify your Gmail as a Brevo sender — free, sends to any recipient"
+```

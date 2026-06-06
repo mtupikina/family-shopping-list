@@ -11,7 +11,7 @@ export class AuthController {
   @Post('magic-link')
   @HttpCode(200)
   async requestMagicLink(@Body() dto: RequestMagicLinkDto): Promise<{ ok: true }> {
-    await this.authService.requestMagicLink(dto.email);
+    await this.authService.requestMagicLink(dto.email, dto.inviteToken);
     return { ok: true };
   }
 

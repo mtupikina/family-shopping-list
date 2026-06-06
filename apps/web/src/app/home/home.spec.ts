@@ -4,6 +4,8 @@ vi.mock('@ionic/angular/standalone', () => ({
   IonHeader: class {},
   IonToolbar: class {},
   IonTitle: class {},
+  IonButtons: class {},
+  IonButton: class {},
   IonContent: class {},
   IonCard: class {},
   IonCardContent: class {},
@@ -14,6 +16,7 @@ vi.mock('@ionic/angular/standalone', () => ({
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { of, firstValueFrom } from 'rxjs';
 import { HomeComponent } from './home';
 import { MemberContextService } from '../members/member-context.service';
@@ -64,6 +67,7 @@ describe('HomeComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
+        provideRouter([]),
         provideHttpClient(),
         provideTranslateService({
           loader: { provide: TranslateLoader, useClass: StubLoader },

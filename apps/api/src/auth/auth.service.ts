@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { EmailService } from '../email/email.service';
+import { InvitesService } from '../invites/invites.service';
 import {
   expiresAtFromDuration,
   generateToken,
@@ -17,19 +18,31 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
     private readonly emailService: EmailService,
+    private readonly invitesService: InvitesService,
   ) {}
 
-  async requestMagicLink(email: string): Promise<void> {
+  async requestMagicLink(email: string, inviteToken?: string): Promise<void> {
     const normalizedEmail = email.trim().toLowerCase();
     const rawToken = generateToken();
     const tokenHash = hashToken(rawToken);
     const magicLinkExpiresIn = this.config.get<string>('MAGIC_LINK_EXPIRES_IN', '15m');
+
+    let inviteId: string | undefined;
+
+    if (inviteToken) {
+      const invite = await this.invitesService.validateInviteForMagicLink(
+        inviteToken,
+        normalizedEmail,
+      );
+      inviteId = invite.id;
+    }
 
     await this.prisma.magicLinkToken.create({
       data: {
         email: normalizedEmail,
         tokenHash,
         expiresAt: expiresAtFromDuration(magicLinkExpiresIn),
+        inviteId,
       },
     });
 
@@ -59,7 +72,12 @@ export class AuthService {
       return this.issueMemberTokens(member.id, member.email, member.familyId);
     }
 
-    return this.issuePendingToken(storedToken.email);
+    if (storedToken.inviteId) {
+      const invite = await this.invitesService.findValidInviteById(storedToken.inviteId);
+      return this.issuePendingToken(storedToken.email, invite.familyId, 'join');
+    }
+
+    return this.issuePendingToken(storedToken.email, undefined, 'create');
   }
 
   async refresh(refreshToken: string): Promise<AuthTokensResponse> {
@@ -110,11 +128,16 @@ export class AuthService {
     };
   }
 
-  issuePendingToken(email: string): AuthTokensResponse {
+  issuePendingToken(
+    email: string,
+    familyId?: string,
+    onboardingKind: 'create' | 'join' = familyId ? 'join' : 'create',
+  ): AuthTokensResponse {
     const payload: JwtPendingPayload = {
       sub: email,
       email,
       pending: true,
+      ...(familyId ? { familyId } : {}),
     };
 
     const expiresIn = this.config.get<string>('JWT_ACCESS_EXPIRES_IN', '15m') as `${number}${'s' | 'm' | 'h' | 'd'}`;
@@ -124,6 +147,7 @@ export class AuthService {
     return {
       accessToken,
       needsOnboarding: true,
+      onboardingKind,
     };
   }
 
