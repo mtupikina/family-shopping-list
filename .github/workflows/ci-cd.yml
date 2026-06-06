@@ -34,6 +34,10 @@ jobs:
         working-directory: apps/web
 
       # ── Test ─────────────────────────────────────────────────────────────
+      - name: Generate Prisma client
+        run: npm run prisma:generate
+        working-directory: apps/api
+
       - name: Test API
         run: npm run test
         working-directory: apps/api
@@ -49,10 +53,6 @@ jobs:
         working-directory: apps/web
 
       # ── Build ─────────────────────────────────────────────────────────────
-      - name: Generate Prisma client
-        run: npm run prisma:generate
-        working-directory: apps/api
-
       - name: Build API
         run: npm run build
         working-directory: apps/api
