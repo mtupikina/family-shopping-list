@@ -4,8 +4,7 @@
   },
   "HOME": {
     "LOADING": "Ładowanie...",
-    "FALLBACK": "Witaj na rodzinnej liście zakupów",
-    "WELCOME": "{{username}} wita Cię w rodzinnej liście zakupów {{familyName}}"
+    "FALLBACK": "Witaj na rodzinnej liście zakupów"
   },
   "LOGIN": {
     "TITLE": "Zaloguj się",
@@ -51,6 +50,49 @@
     "ERROR_GENERIC": "Nie udało się wysłać zaproszenia. Spróbuj ponownie.",
     "ERROR_ALREADY_MEMBER": "Ten adres e-mail należy już do członka rodziny.",
     "ERROR_PENDING_INVITE": "Zaproszenie na ten adres e-mail zostało już wysłane."
+  },
+  "ITEMS": {
+    "TEXT": "Produkt",
+    "QUANTITY": "Ilość",
+    "UNIT": "Jednostka",
+    "UNIT_NONE": "—",
+    "UNITS": {
+      "pcs": "szt.",
+      "kg": "kg",
+      "g": "g",
+      "l": "l",
+      "ml": "ml",
+      "pack": "opak.",
+      "bottle": "butelka",
+      "can": "puszka"
+    },
+    "DUPLICATE_WARNING": "\"{{text}}\" jest już na liście",
+    "SECTION_TO_BUY": "Do kupienia",
+    "SECTION_DONE": "Kupione ({{count}})",
+    "SECTION_REJECTED": "Odrzucone ({{count}})",
+    "EDIT_TITLE": "Edytuj produkt",
+    "COMPLETE_TITLE": "Produkt kupiony",
+    "REJECT_TITLE": "Dlaczego nie?",
+    "REJECT_SUBTITLE": "Dodaj powód (opcjonalnie)",
+    "REJECT": "Odrzuć",
+    "EMPTY": "Brak produktów. Dodaj coś powyżej.",
+    "ARCHIVE_MODE": "Archiwizuj",
+    "CANCEL_ARCHIVE": "Anuluj",
+    "ARCHIVE_SELECTED": "Archiwizuj {{count}} zaznaczone",
+    "SAVE": "Zapisz",
+    "SKIP": "Pomiń",
+    "COMPLETE_DETAILS": "Dodać cenę i sklep? (opcjonalnie)",
+    "PRICE": "Cena (zł)",
+    "STORE": "Sklep",
+    "SAVE_DETAILS": "Zapisz szczegóły",
+    "REJECT_REASON_PLACEHOLDER": "Powód odrzucenia (opcjonalnie)",
+    "SAVE_REASON": "Zapisz powód",
+    "REJECT_REASONS": {
+      "TOO_EXPENSIVE": "Za drogie",
+      "OUT_OF_STOCK": "Brak w sklepie",
+      "NOT_NEEDED": "Niepotrzebne",
+      "GOT_ELSEWHERE": "Kupione gdzie indziej"
+    }
   },
   "HEADER": {
     "HOME": "Strona główna",

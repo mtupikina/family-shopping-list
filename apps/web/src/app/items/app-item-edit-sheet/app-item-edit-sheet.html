@@ -1,0 +1,124 @@
+<div class="bg-white px-4 pt-3 pb-6">
+  <div class="mx-auto mb-4 h-1 w-10 rounded-full bg-gray-300"></div>
+
+  @if (mode() === 'edit') {
+    <h2 class="m-0 mb-1 text-lg font-semibold text-gray-900">{{ 'ITEMS.EDIT_TITLE' | translate }}</h2>
+    <ion-list lines="none" class="bg-transparent p-0">
+      <ion-input
+        fill="outline"
+        class="mb-2 [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+        [label]="'ITEMS.TEXT' | translate"
+        labelPlacement="stacked"
+        [ngModel]="text()"
+        (ngModelChange)="text.set($event)"
+      ></ion-input>
+      <div class="flex gap-2">
+        <ion-input
+          fill="outline"
+          class="mb-2 flex-1 [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+          [label]="'ITEMS.QUANTITY' | translate"
+          labelPlacement="stacked"
+          type="number"
+          inputmode="decimal"
+          [ngModel]="quantity()"
+          (ngModelChange)="onQuantityChange($event)"
+        ></ion-input>
+        <ion-select
+          fill="outline"
+          class="mb-2 flex-1 text-sm [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+          interface="popover"
+          [label]="'ITEMS.UNIT' | translate"
+          labelPlacement="stacked"
+          [ngModel]="unit()"
+          (ngModelChange)="unit.set($event)"
+        >
+          <ion-select-option value="">{{ 'ITEMS.UNIT_NONE' | translate }}</ion-select-option>
+          @for (u of itemUnits; track u) {
+            <ion-select-option [value]="u">{{ unitLabelKey(u) | translate }}</ion-select-option>
+          }
+        </ion-select>
+      </div>
+
+      @if (item()?.status === 'REJECTED') {
+        <app-reject-reason-field
+          [value]="rejectReason()"
+          [presetKeys]="rejectReasonKeys"
+          (valueChange)="rejectReason.set($event)"
+        ></app-reject-reason-field>
+      }
+
+      @if (item()?.status === 'COMPLETED') {
+        <ion-input
+          fill="outline"
+          class="mb-2 [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+          [label]="'ITEMS.PRICE' | translate"
+          labelPlacement="stacked"
+          type="number"
+          inputmode="decimal"
+          autocomplete="off"
+          [ngModel]="price()"
+          (ngModelChange)="onPriceChange($event)"
+        >
+          <span slot="end" class="pr-1 text-sm text-gray-500">{{ currencySymbol }}</span>
+        </ion-input>
+        <app-store-field
+          [value]="store()"
+          [stores]="familyStores()"
+          (valueChange)="store.set($event)"
+        ></app-store-field>
+      }
+    </ion-list>
+
+    <div class="mt-4 flex justify-end gap-2">
+      @if (canRejectItem()) {
+        <ion-button fill="outline" color="danger" (click)="rejectClick.emit()">
+          {{ 'ITEMS.REJECT' | translate }}
+        </ion-button>
+      }
+      <ion-button fill="solid" (click)="onSave()">{{ 'ITEMS.SAVE' | translate }}</ion-button>
+    </div>
+  }
+
+  @if (mode() === 'complete') {
+    <h2 class="m-0 mb-1 text-lg font-semibold text-gray-900">{{ 'ITEMS.COMPLETE_TITLE' | translate }}</h2>
+    <p class="m-0 mb-4 text-sm text-gray-500">{{ 'ITEMS.COMPLETE_DETAILS' | translate }}</p>
+    <ion-list lines="none" class="bg-transparent p-0">
+      <ion-input
+        fill="outline"
+        class="mb-2 [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+        [label]="'ITEMS.PRICE' | translate"
+        labelPlacement="stacked"
+        type="number"
+        inputmode="decimal"
+        autocomplete="off"
+        [ngModel]="price()"
+        (ngModelChange)="onPriceChange($event)"
+      >
+        <span slot="end" class="pr-1 text-sm text-gray-500">{{ currencySymbol }}</span>
+      </ion-input>
+      <app-store-field
+        [value]="store()"
+        [stores]="familyStores()"
+        (valueChange)="store.set($event)"
+      ></app-store-field>
+    </ion-list>
+    <div class="mt-4 flex justify-end gap-2">
+      <ion-button fill="clear" (click)="dismissClick.emit()">{{ 'ITEMS.SKIP' | translate }}</ion-button>
+      <ion-button fill="solid" (click)="onSave()">{{ 'ITEMS.SAVE_DETAILS' | translate }}</ion-button>
+    </div>
+  }
+
+  @if (mode() === 'reject') {
+    <h2 class="m-0 mb-1 text-lg font-semibold text-gray-900">{{ 'ITEMS.REJECT_TITLE' | translate }}</h2>
+    <p class="m-0 mb-4 text-sm text-gray-500">{{ 'ITEMS.REJECT_SUBTITLE' | translate }}</p>
+    <app-reject-reason-field
+      [value]="rejectReason()"
+      [presetKeys]="rejectReasonKeys"
+      (valueChange)="rejectReason.set($event)"
+    ></app-reject-reason-field>
+    <div class="mt-4 flex justify-end gap-2">
+      <ion-button fill="clear" (click)="dismissClick.emit()">{{ 'ITEMS.SKIP' | translate }}</ion-button>
+      <ion-button fill="solid" (click)="onSave()">{{ 'ITEMS.SAVE_REASON' | translate }}</ion-button>
+    </div>
+  }
+</div>

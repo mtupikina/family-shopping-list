@@ -4,8 +4,7 @@
   },
   "HOME": {
     "LOADING": "Завантаження...",
-    "FALLBACK": "Ласкаво просимо до сімейного списку покупок",
-    "WELCOME": "{{username}} вітає вас у сімейному списку покупок {{familyName}}"
+    "FALLBACK": "Ласкаво просимо до сімейного списку покупок"
   },
   "LOGIN": {
     "TITLE": "Увійти",
@@ -52,8 +51,48 @@
     "ERROR_ALREADY_MEMBER": "Ця адреса вже належить учаснику сім'ї.",
     "ERROR_PENDING_INVITE": "Запрошення на цю адресу вже надіслано."
   },
-  "MENU": {
-    "FAMILY": "Сім'я"
+  "ITEMS": {
+    "TEXT": "Товар",
+    "QUANTITY": "Кількість",
+    "UNIT": "Одиниця",
+    "UNIT_NONE": "—",
+    "UNITS": {
+      "pcs": "шт.",
+      "kg": "кг",
+      "g": "г",
+      "l": "л",
+      "ml": "мл",
+      "pack": "пачка",
+      "bottle": "пляшка",
+      "can": "банка"
+    },
+    "DUPLICATE_WARNING": "\"{{text}}\" уже є в списку",
+    "SECTION_TO_BUY": "Купити",
+    "SECTION_DONE": "Куплено ({{count}})",
+    "SECTION_REJECTED": "Відхилено ({{count}})",
+    "EDIT_TITLE": "Редагувати товар",
+    "COMPLETE_TITLE": "Товар куплено",
+    "REJECT_TITLE": "Чому ні?",
+    "REJECT_SUBTITLE": "Додайте причину (необов'язково)",
+    "REJECT": "Відхилити",
+    "EMPTY": "Поки немає товарів. Додайте щось вище.",
+    "ARCHIVE_MODE": "Архівувати",
+    "CANCEL_ARCHIVE": "Скасувати",
+    "ARCHIVE_SELECTED": "Архівувати {{count}} вибраних",
+    "SAVE": "Зберегти",
+    "SKIP": "Пропустити",
+    "COMPLETE_DETAILS": "Додати ціну та магазин? (необов'язково)",
+    "PRICE": "Ціна (zł)",
+    "STORE": "Магазин",
+    "SAVE_DETAILS": "Зберегти деталі",
+    "REJECT_REASON_PLACEHOLDER": "Причина відхилення (необов'язково)",
+    "SAVE_REASON": "Зберегти причину",
+    "REJECT_REASONS": {
+      "TOO_EXPENSIVE": "Занадто дорого",
+      "OUT_OF_STOCK": "Немає в наявності",
+      "NOT_NEEDED": "Не потрібно",
+      "GOT_ELSEWHERE": "Куплено в іншому місці"
+    }
   },
   "HEADER": {
     "HOME": "Головна",

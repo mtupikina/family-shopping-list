@@ -15,7 +15,7 @@ async function bootstrap() {
   const allowedOrigin = (process.env.ALLOWED_ORIGIN || 'http://localhost:4200').replace(/\/$/, '');
   app.enableCors({
     origin: allowedOrigin,
-    methods: ['GET', 'POST', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
 

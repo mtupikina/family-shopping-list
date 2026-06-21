@@ -1,22 +1,120 @@
 <app-header></app-header>
 
-<ion-content class="ion-padding">
-  <div class="flex flex-col items-center justify-center min-h-full py-12">
-    @if (loading()) {
-      <div class="flex flex-col items-center gap-4">
-        <ion-spinner name="crescent" color="primary"></ion-spinner>
-        <p class="text-sm text-gray-500">{{ 'HOME.LOADING' | translate }}</p>
-      </div>
-    } @else if (error()) {
-      <p class="text-center text-gray-600">{{ 'HOME.FALLBACK' | translate }}</p>
-    } @else {
-      <ion-card class="w-full max-w-sm shadow-md rounded-2xl">
-        <ion-card-content>
-          <p class="text-center text-lg font-medium text-gray-800 py-4">
-            {{ welcomeMessage() }}
-          </p>
-        </ion-card-content>
-      </ion-card>
-    }
-  </div>
+<ion-content class="ion-padding [--background:#fafafa]">
+  @if (pageLoading()) {
+    <div class="flex min-h-full flex-col items-center justify-center gap-4 py-12">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p class="text-sm text-gray-500">{{ 'HOME.LOADING' | translate }}</p>
+    </div>
+  } @else if (pageError()) {
+    <p class="py-12 text-center text-sm text-gray-500">{{ 'HOME.FALLBACK' | translate }}</p>
+  } @else {
+    <div class="mx-auto flex max-w-2xl flex-col gap-4 pb-20">
+      <section class="flex items-center gap-2">
+        <ion-input
+          fill="outline"
+          class="mb-0 flex-1 [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+          [placeholder]="'ITEMS.TEXT' | translate"
+          [value]="newText()"
+          (ionInput)="onNewTextChange($any($event).detail.value ?? '')"
+          (keyup.enter)="addItem()"
+        ></ion-input>
+        <ion-button class="m-0" (click)="addItem()" [disabled]="!newText().trim()">
+          <ion-icon slot="icon-only" icon="add-outline"></ion-icon>
+        </ion-button>
+      </section>
+
+      @if (duplicateWarning()) {
+        <p class="px-1 text-xs text-amber-600">
+          {{ 'ITEMS.DUPLICATE_WARNING' | translate: { text: duplicateWarning() } }}
+        </p>
+      }
+
+      @if (!hasItems()) {
+        <p class="py-8 text-center text-sm text-gray-400">{{ 'ITEMS.EMPTY' | translate }}</p>
+      }
+
+      <app-item-section
+        [items]="groupedItems().newItems"
+        titleKey="ITEMS.SECTION_TO_BUY"
+        [archiveMode]="archiveMode()"
+        [selectedIds]="selectedArchiveIds()"
+        [translateUnit]="translateUnit"
+        (completeClick)="completeItem($event)"
+        (editClick)="openEditSheet($event)"
+        (selectionChange)="onArchiveSelection($event)"
+      />
+
+      <app-item-section
+        [items]="groupedItems().completedItems"
+        titleKey="ITEMS.SECTION_DONE"
+        [titleParams]="{ count: groupedItems().completedItems.length }"
+        [collapsible]="true"
+        [expanded]="showDoneSection()"
+        [archiveMode]="archiveMode()"
+        [selectedIds]="selectedArchiveIds()"
+        [translateUnit]="translateUnit"
+        (sectionToggle)="toggleDoneSection()"
+        (editClick)="openEditSheet($event)"
+        (selectionChange)="onArchiveSelection($event)"
+      />
+
+      <app-item-section
+        [items]="groupedItems().rejectedItems"
+        titleKey="ITEMS.SECTION_REJECTED"
+        [titleParams]="{ count: groupedItems().rejectedItems.length }"
+        [collapsible]="true"
+        [expanded]="showRejectedSection()"
+        [archiveMode]="archiveMode()"
+        [selectedIds]="selectedArchiveIds()"
+        [translateUnit]="translateUnit"
+        (sectionToggle)="toggleRejectedSection()"
+        (editClick)="openEditSheet($event)"
+        (selectionChange)="onArchiveSelection($event)"
+      />
+
+      @if (archiveMode()) {
+        <div
+          class="fixed inset-x-0 bottom-0 z-10 flex justify-between gap-3 border-t border-gray-200 bg-white px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
+        >
+          <ion-button class="m-0 flex-1" fill="outline" (click)="toggleArchiveMode()">
+            {{ 'ITEMS.CANCEL_ARCHIVE' | translate }}
+          </ion-button>
+          <ion-button
+            class="m-0 flex-1"
+            fill="solid"
+            (click)="archiveSelected()"
+            [disabled]="selectedArchiveIds().size === 0"
+          >
+            {{ 'ITEMS.ARCHIVE_SELECTED' | translate: { count: selectedArchiveIds().size } }}
+          </ion-button>
+        </div>
+      } @else if (hasItems()) {
+        <div class="flex justify-center">
+          <ion-button fill="clear" size="small" (click)="toggleArchiveMode()">
+            <ion-icon slot="start" icon="archive-outline"></ion-icon>
+            {{ 'ITEMS.ARCHIVE_MODE' | translate }}
+          </ion-button>
+        </div>
+      }
+    </div>
+  }
 </ion-content>
+
+<ion-modal
+  [isOpen]="sheetOpen()"
+  [initialBreakpoint]="0.75"
+  [breakpoints]="[0, 0.75, 1]"
+  (didDismiss)="closeSheet()"
+>
+  <ng-template>
+    <app-item-edit-sheet
+      [item]="sheetItem()"
+      [mode]="sheetMode()"
+      [familyStores]="familyStores()"
+      (saveClick)="saveSheet($event)"
+      (dismissClick)="closeSheet()"
+      (rejectClick)="rejectFromSheet()"
+    ></app-item-edit-sheet>
+  </ng-template>
+</ion-modal>

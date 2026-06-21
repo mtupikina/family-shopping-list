@@ -1,0 +1,25 @@
+<div class="flex-1">
+  <ion-textarea
+    fill="outline"
+    class="mb-2 min-h-20 w-full [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+    [label]="'ITEMS.REJECT_REASON_PLACEHOLDER' | translate"
+    labelPlacement="stacked"
+    [value]="value()"
+    (ionInput)="onInput($any($event).detail.value ?? '')"
+    (ionFocus)="focused.set(true)"
+    (ionBlur)="onBlur()"
+  ></ion-textarea>
+  @if (focused() && suggestions().length > 0) {
+    <div class="mt-2 flex flex-wrap gap-2">
+      @for (suggestion of suggestions(); track suggestion.key) {
+        <ion-chip
+          class="m-0 cursor-pointer rounded-full border border-gray-200 bg-gray-50 px-3.5 py-1.5 text-sm text-gray-700 [--background:#f9fafb] [--color:#374151] hover:[--background:#eff6ff] hover:[--color:#1d4ed8] hover:border-blue-300"
+          (mousedown)="$event.preventDefault()"
+          (click)="pick(suggestion.label)"
+        >
+          {{ suggestion.label }}
+        </ion-chip>
+      }
+    </div>
+  }
+</div>

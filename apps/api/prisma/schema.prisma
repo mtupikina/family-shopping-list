@@ -7,12 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ItemStatus {
+  NEW
+  REJECTED
+  COMPLETED
+}
+
 model Family {
   id        String         @id @default(uuid())
   name      String
   createdAt DateTime       @default(now())
   members   Member[]
   invites   FamilyInvite[]
+  items     ShoppingItem[]
 }
 
 model Member {
@@ -23,6 +30,9 @@ model Member {
   family        Family         @relation(fields: [familyId], references: [id])
   createdAt     DateTime       @default(now())
   refreshTokens RefreshToken[]
+  itemsCreated  ShoppingItem[] @relation("ItemCreatedBy")
+  itemsRejected ShoppingItem[] @relation("ItemRejectedBy")
+  itemsCompleted ShoppingItem[] @relation("ItemCompletedBy")
 }
 
 model FamilyInvite {
@@ -60,4 +70,33 @@ model RefreshToken {
   expiresAt DateTime
   revokedAt DateTime?
   createdAt DateTime  @default(now())
+}
+
+model ShoppingItem {
+  id            String     @id @default(uuid())
+  familyId      String
+  family        Family     @relation(fields: [familyId], references: [id])
+  text          String
+  quantity      Decimal?
+  unit          String?
+  category      String?
+  status        ItemStatus @default(NEW)
+  archived      Boolean    @default(false)
+  archivedAt    DateTime?
+  createdById   String
+  createdBy     Member     @relation("ItemCreatedBy", fields: [createdById], references: [id])
+  rejectedById  String?
+  rejectedBy    Member?    @relation("ItemRejectedBy", fields: [rejectedById], references: [id])
+  rejectReason  String?
+  rejectedAt    DateTime?
+  completedById String?
+  completedBy   Member?    @relation("ItemCompletedBy", fields: [completedById], references: [id])
+  price         Decimal?
+  store         String?
+  completedAt   DateTime?
+  version       Int        @default(0)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([familyId, archived, status])
 }

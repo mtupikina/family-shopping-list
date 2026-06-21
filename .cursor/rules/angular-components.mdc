@@ -1,0 +1,46 @@
+---
+description: Angular component file structure for the web app
+globs: apps/web/src/app/**/*.ts
+alwaysApply: false
+---
+
+# Angular component structure
+
+Each component lives in its own folder with separate template and class files.
+
+## Required layout
+
+```
+app-feature-name/
+  app-feature-name.ts      # @Component class only
+  app-feature-name.html    # template
+```
+
+Route-level pages may omit the `app-` folder prefix (e.g. `home/home.ts` → selector `app-home`).
+
+## Rules
+
+- Use `templateUrl: './app-feature-name.html'` — never inline `template: \`...\``.
+- One `@Component` per `.ts` file. Do not combine multiple components in one file.
+- Shared types go in a dedicated `*.types.ts` file (e.g. `item-sheet.types.ts`), not in a component file.
+- **Folder name = file name = selector = HTML tag** (e.g. `app-item-section/` → `app-item-section.ts` → selector `app-item-section` → `<app-item-section>`). This makes tag-to-file navigation work in the IDE.
+
+## Examples
+
+```typescript
+// ❌ BAD — folder item-section/ but selector app-item-section
+@Component({ selector: 'app-item-section', templateUrl: './item-section.html' })
+
+// ✅ GOOD
+@Component({
+  selector: 'app-item-section',
+  standalone: true,
+  templateUrl: './app-item-section.html',
+})
+export class ItemSectionComponent {}
+```
+
+```html
+<!-- ✅ GOOD — tag matches folder app-item-section/ -->
+<app-item-section [items]="items()" titleKey="ITEMS.SECTION_TO_BUY" />
+```
