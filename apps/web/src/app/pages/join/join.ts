@@ -9,9 +9,10 @@ import {
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
-import { environment } from '../../environments/environment';
-import { AuthService } from '../auth/auth.service';
-import { AppHeaderComponent } from '../shared/app-header/app-header';
+
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/auth.service';
+import { AppHeaderComponent } from '../../shared/app-header/app-header';
 
 interface InvitePreview {
   familyName: string;

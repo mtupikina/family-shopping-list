@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
   IonContent,
   IonItem,
   IonInput,
@@ -14,28 +11,28 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
-import { environment } from '../../environments/environment';
-import { AuthService } from '../auth/auth.service';
-import { AuthTokensResponse } from '../auth/auth.types';
+
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/auth.service';
+import { AuthTokensResponse } from '../../auth/auth.types';
+import { AppHeaderComponent } from '../../shared/app-header/app-header';
 
 @Component({
-  selector: 'app-onboarding-family',
+  selector: 'app-onboarding-join',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonItem,
     IonInput,
     IonButton,
     IonText,
     TranslatePipe,
+    AppHeaderComponent,
   ],
-  templateUrl: './onboarding-family.html',
+  templateUrl: './onboarding-join.html',
 })
-export class OnboardingFamilyComponent {
+export class OnboardingJoinComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
@@ -45,7 +42,6 @@ export class OnboardingFamilyComponent {
   readonly error = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    familyName: ['', [Validators.required, Validators.minLength(2)]],
     username: ['', [Validators.required, Validators.minLength(2)]],
   });
 
@@ -60,15 +56,14 @@ export class OnboardingFamilyComponent {
 
     try {
       const response = await firstValueFrom(
-        this.http.post<AuthTokensResponse>(`${environment.apiBaseUrl}/onboarding/family`, {
-          familyName: this.form.controls.familyName.value,
+        this.http.post<AuthTokensResponse>(`${environment.apiBaseUrl}/onboarding/join`, {
           username: this.form.controls.username.value,
         }),
       );
       this.auth.setSession(response);
       await this.router.navigateByUrl('/');
     } catch {
-      this.error.set('ONBOARDING.ERROR');
+      this.error.set('ONBOARDING_JOIN.ERROR');
     } finally {
       this.loading.set(false);
     }

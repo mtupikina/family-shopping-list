@@ -1,4 +1,15 @@
 import { vi } from 'vitest';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { of, firstValueFrom } from 'rxjs';
+import { provideTranslateService, TranslateLoader, TranslateService } from '@ngx-translate/core';
+
+import { HomeComponent } from './home';
+import { MemberContextService } from '../../services/member-context.service';
+import { ItemsService } from '../../services/items.service';
+import { ShoppingItem } from '../../types/items';
 
 vi.mock('@ionic/angular/standalone', () => ({
   IonHeader: class {},
@@ -23,21 +34,9 @@ vi.mock('@ionic/angular/standalone', () => ({
   provideIonicAngular: () => [],
 }));
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
-import { provideRouter } from '@angular/router';
-import { of, firstValueFrom } from 'rxjs';
-import { HomeComponent } from './home';
-import { MemberContextService } from '../members/member-context.service';
-import { ItemsService } from '../items/items.service';
-import { provideTranslateService, TranslateLoader, TranslateService } from '@ngx-translate/core';
-import { of as rxOf } from 'rxjs';
-import { provideHttpClient } from '@angular/common/http';
-import { ShoppingItem } from '../items/item.types';
-
 class StubLoader implements TranslateLoader {
   getTranslation() {
-    return rxOf({
+    return of({
       APP: { TITLE: 'Family Shopping List' },
       HOME: {
         LOADING: 'Loading...',

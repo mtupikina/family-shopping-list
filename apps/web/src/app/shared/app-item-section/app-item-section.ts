@@ -3,8 +3,9 @@ import { IonIcon, IonList } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { chevronDownOutline, chevronUpOutline } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';
+
 import { ItemRowComponent } from '../app-item-row/app-item-row';
-import { ShoppingItem } from '../item.types';
+import { ShoppingItem } from '../../types/items';
 
 @Component({
   selector: 'app-item-section',

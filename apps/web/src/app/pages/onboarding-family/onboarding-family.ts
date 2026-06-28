@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
   IonContent,
   IonItem,
   IonInput,
@@ -11,27 +14,29 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
-import { environment } from '../../environments/environment';
-import { AuthService } from '../auth/auth.service';
-import { AuthTokensResponse } from '../auth/auth.types';
-import { AppHeaderComponent } from '../shared/app-header/app-header';
+
+import { environment } from '../../../environments/environment';
+import { AuthService } from '../../auth/auth.service';
+import { AuthTokensResponse } from '../../auth/auth.types';
 
 @Component({
-  selector: 'app-onboarding-join',
+  selector: 'app-onboarding-family',
   standalone: true,
   imports: [
     ReactiveFormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
     IonContent,
     IonItem,
     IonInput,
     IonButton,
     IonText,
     TranslatePipe,
-    AppHeaderComponent,
   ],
-  templateUrl: './onboarding-join.html',
+  templateUrl: './onboarding-family.html',
 })
-export class OnboardingJoinComponent {
+export class OnboardingFamilyComponent {
   private readonly fb = inject(FormBuilder);
   private readonly http = inject(HttpClient);
   private readonly auth = inject(AuthService);
@@ -41,6 +46,7 @@ export class OnboardingJoinComponent {
   readonly error = signal<string | null>(null);
 
   readonly form = this.fb.nonNullable.group({
+    familyName: ['', [Validators.required, Validators.minLength(2)]],
     username: ['', [Validators.required, Validators.minLength(2)]],
   });
 
@@ -55,14 +61,15 @@ export class OnboardingJoinComponent {
 
     try {
       const response = await firstValueFrom(
-        this.http.post<AuthTokensResponse>(`${environment.apiBaseUrl}/onboarding/join`, {
+        this.http.post<AuthTokensResponse>(`${environment.apiBaseUrl}/onboarding/family`, {
+          familyName: this.form.controls.familyName.value,
           username: this.form.controls.username.value,
         }),
       );
       this.auth.setSession(response);
       await this.router.navigateByUrl('/');
     } catch {
-      this.error.set('ONBOARDING_JOIN.ERROR');
+      this.error.set('ONBOARDING.ERROR');
     } finally {
       this.loading.set(false);
     }

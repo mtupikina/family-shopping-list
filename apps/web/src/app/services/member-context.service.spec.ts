@@ -1,8 +1,9 @@
 import { vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { MemberContextService } from './member-context.service';
+
 import { MEMBER_CONTEXT_KEY } from '../auth/auth.types';
+import { MemberContextService } from './member-context.service';
 
 describe('MemberContextService', () => {
   let service: MemberContextService;

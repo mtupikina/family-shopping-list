@@ -10,8 +10,9 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
-import { environment } from '../../environments/environment';
-import { AppHeaderComponent } from '../shared/app-header/app-header';
+
+import { environment } from '../../../environments/environment';
+import { AppHeaderComponent } from '../../shared/app-header/app-header';
 
 @Component({
   selector: 'app-family',

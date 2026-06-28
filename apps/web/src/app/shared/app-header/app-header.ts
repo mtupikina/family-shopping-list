@@ -15,9 +15,10 @@ import {
   syncOutline,
 } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';
+
 import { AuthService } from '../../auth/auth.service';
-import { MemberContextService } from '../../members/member-context.service';
-import { ConnectivityService } from '../connectivity.service';
+import { MemberContextService } from '../../services/member-context.service';
+import { ConnectivityService } from '../../services/connectivity.service';
 
 @Component({
   selector: 'app-header',

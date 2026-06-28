@@ -8,15 +8,16 @@ import {
   IonSelectOption,
 } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
-import { CURRENCY_SYMBOL } from '../currency';
+
 import {
+  CURRENCY_SYMBOL,
   canRejectItem,
   coerceFormString,
   defaultUnitForItem,
-} from '../item-display.util';
-import { ItemSheetFormValues, ItemSheetMode } from '../item-sheet.types';
-import { DEFAULT_ITEM_UNIT, ITEM_UNITS, unitLabelKey } from '../item-units';
-import { ShoppingItem } from '../item.types';
+} from '../../utils/item-display.util';
+import { ItemSheetFormValues, ItemSheetMode } from '../../types/itemSheet';
+import { DEFAULT_ITEM_UNIT, ITEM_UNITS, unitLabelKey } from '../../types/units';
+import { ShoppingItem } from '../../types/items';
 import { RejectReasonFieldComponent } from '../app-reject-reason-field/app-reject-reason-field';
 import { StoreFieldComponent } from '../app-store-field/app-store-field';
 

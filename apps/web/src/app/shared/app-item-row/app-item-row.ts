@@ -2,13 +2,14 @@ import { Component, computed, input, output } from '@angular/core';
 import { IonButton, IonCheckbox, IonIcon, IonItem, IonLabel } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { checkmarkCircle, closeCircle, ellipseOutline, ellipsisHorizontal } from 'ionicons/icons';
+
 import {
   canCompleteItem,
   itemMeta,
   itemStatusClass,
   itemTitle,
-} from '../item-display.util';
-import { ShoppingItem } from '../item.types';
+} from '../../utils/item-display.util';
+import { ShoppingItem } from '../../types/items';
 
 @Component({
   selector: 'app-item-row',

@@ -8,7 +8,7 @@ import {
   itemTitle,
   parseOptionalNumber,
 } from './item-display.util';
-import { ShoppingItem } from './item.types';
+import { ShoppingItem } from '../types/items';
 
 const baseItem: ShoppingItem = {
   id: 'item-1',

@@ -9,7 +9,8 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { TranslatePipe } from '@ngx-translate/core';
-import { AuthService } from '../auth/auth.service';
+
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-auth-verify',

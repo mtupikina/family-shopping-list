@@ -15,8 +15,9 @@ import {
 import { addIcons } from 'ionicons';
 import { homeOutline, peopleOutline, logOutOutline } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';
+
 import { AuthService } from '../../auth/auth.service';
-import { MemberContextService } from '../../members/member-context.service';
+import { MemberContextService } from '../../services/member-context.service';
 
 @Component({
   selector: 'app-menu',

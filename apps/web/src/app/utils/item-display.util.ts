@@ -1,6 +1,14 @@
-import { formatPrice } from './currency';
-import { DEFAULT_ITEM_UNIT, isItemUnit, unitLabelKey } from './item-units';
-import { ShoppingItem } from './item.types';
+import { DEFAULT_ITEM_UNIT, isItemUnit, unitLabelKey } from '../types/units';
+import { ShoppingItem } from '../types/items';
+
+export const CURRENCY_SYMBOL = 'zł';
+
+export function formatPrice(price: string | null | undefined): string {
+  if (price == null || price === '') {
+    return '';
+  }
+  return `${price} ${CURRENCY_SYMBOL}`;
+}
 
 export function canCompleteItem(item: ShoppingItem): boolean {
   return item.status === 'NEW';

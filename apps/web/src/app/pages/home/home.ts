@@ -20,16 +20,17 @@ import {
   ellipsisHorizontal,
 } from 'ionicons/icons';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { MemberContextService } from '../members/member-context.service';
-import { MemberContext } from '../auth/auth.types';
-import { AppHeaderComponent } from '../shared/app-header/app-header';
-import { ItemsService } from '../items/items.service';
-import { ShoppingItem } from '../items/item.types';
-import { groupActiveItems, parseOptionalNumber } from '../items/item-display.util';
-import { ItemEditSheetComponent } from '../items/app-item-edit-sheet/app-item-edit-sheet';
-import { ItemSectionComponent } from '../items/app-item-section/app-item-section';
-import { ItemSheetFormValues, ItemSheetMode } from '../items/item-sheet.types';
-import { DEFAULT_ITEM_UNIT } from '../items/item-units';
+
+import { MemberContextService } from '../../services/member-context.service';
+import { MemberContext } from '../../auth/auth.types';
+import { AppHeaderComponent } from '../../shared/app-header/app-header';
+import { ItemsService } from '../../services/items.service';
+import { ShoppingItem } from '../../types/items';
+import { groupActiveItems, parseOptionalNumber } from '../../utils/item-display.util';
+import { ItemEditSheetComponent } from '../../shared/app-item-edit-sheet/app-item-edit-sheet';
+import { ItemSectionComponent } from '../../shared/app-item-section/app-item-section';
+import { ItemSheetFormValues, ItemSheetMode } from '../../types/itemSheet';
+import { DEFAULT_ITEM_UNIT } from '../../types/units';
 
 @Component({
   selector: 'app-home',

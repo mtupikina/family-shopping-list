@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { ItemsService } from './items.service';
 import { AuthService } from '../auth/auth.service';
-import { ConnectivityService } from '../shared/connectivity.service';
-import { ShoppingItem, ITEMS_CACHE_KEY, ITEMS_QUEUE_KEY } from './item.types';
+import { ConnectivityService } from './connectivity.service';
+import { ShoppingItem, ITEMS_CACHE_KEY, ITEMS_QUEUE_KEY } from '../types/items';
 
 const sampleItem: ShoppingItem = {
   id: 'item-1',

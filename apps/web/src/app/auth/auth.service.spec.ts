@@ -1,4 +1,5 @@
 import { vi } from 'vitest';
+
 import { AuthService } from './auth.service';
 import { REFRESH_TOKEN_KEY } from './auth.types';
 

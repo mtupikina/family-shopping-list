@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
-import { ConnectivityService } from '../shared/connectivity.service';
+import { ConnectivityService } from './connectivity.service';
 import {
   CompleteItemPayload,
   CreateItemPayload,
@@ -14,7 +14,7 @@ import {
   RejectItemPayload,
   ShoppingItem,
   UpdateItemPayload,
-} from './item.types';
+} from '../types/items';
 
 @Injectable({ providedIn: 'root' })
 export class ItemsService {
