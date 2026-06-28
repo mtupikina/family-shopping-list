@@ -263,6 +263,27 @@ export class ItemsService {
     }
   }
 
+  async suggestItemTexts(query: string): Promise<string[]> {
+    const trimmed = query.trim();
+    if (trimmed.length < 3) {
+      return [];
+    }
+
+    if (!this.connectivity.online()) {
+      return this.suggestTextsFromItems(this.items(), trimmed);
+    }
+
+    try {
+      return await firstValueFrom(
+        this.http.get<string[]>(`${environment.apiBaseUrl}/items/suggestions`, {
+          params: { q: trimmed },
+        }),
+      );
+    } catch {
+      return this.suggestTextsFromItems(this.items(), trimmed);
+    }
+  }
+
   findDuplicate(text: string): ShoppingItem | undefined {
     const normalized = text.trim().toLowerCase();
     return this.activeItems().find(
@@ -348,6 +369,31 @@ export class ItemsService {
       return;
     }
     this.familyStores.update(stores => [trimmed, ...stores]);
+  }
+
+  private suggestTextsFromItems(items: ShoppingItem[], query: string): string[] {
+    const normalizedQuery = query.toLowerCase();
+    const seen = new Set<string>();
+    const suggestions: string[] = [];
+    const sorted = [...items].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+
+    for (const item of sorted) {
+      const text = item.text.trim();
+      if (!text) {
+        continue;
+      }
+      const key = text.toLowerCase();
+      if (!key.includes(normalizedQuery) || seen.has(key) || key === normalizedQuery) {
+        continue;
+      }
+      seen.add(key);
+      suggestions.push(text);
+      if (suggestions.length >= 8) {
+        break;
+      }
+    }
+
+    return suggestions;
   }
 
   private storesFromItems(items: ShoppingItem[]): string[] {

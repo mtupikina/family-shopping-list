@@ -46,6 +46,11 @@ export class ItemsController {
     return this.itemsService.listStores(user.familyId);
   }
 
+  @Get('suggestions')
+  listSuggestions(@CurrentUser() user: JwtMemberPayload, @Query('q') query = '') {
+    return this.itemsService.listSuggestions(user.familyId, query);
+  }
+
   @Get('archived')
   listArchived(@CurrentUser() user: JwtMemberPayload, @Query() query: ListArchivedItemsQueryDto) {
     return this.itemsService.listArchived(user.familyId, query);

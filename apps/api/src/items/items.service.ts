@@ -93,6 +93,44 @@ export class ItemsService {
     };
   }
 
+  async listSuggestions(familyId: string, query: string): Promise<string[]> {
+    const trimmed = query.trim();
+    if (trimmed.length < 3) {
+      return [];
+    }
+
+    const items = await this.prisma.shoppingItem.findMany({
+      where: {
+        familyId,
+        text: { contains: trimmed, mode: 'insensitive' },
+      },
+      select: { text: true, createdAt: true },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    const seen = new Set<string>();
+    const normalizedQuery = trimmed.toLowerCase();
+    const suggestions: string[] = [];
+
+    for (const item of items) {
+      const text = item.text.trim();
+      if (!text) {
+        continue;
+      }
+      const key = text.toLowerCase();
+      if (seen.has(key) || key === normalizedQuery) {
+        continue;
+      }
+      seen.add(key);
+      suggestions.push(text);
+      if (suggestions.length >= 8) {
+        break;
+      }
+    }
+
+    return suggestions;
+  }
+
   async listStores(familyId: string): Promise<string[]> {
     const items = await this.prisma.shoppingItem.findMany({
       where: { familyId, store: { not: null } },

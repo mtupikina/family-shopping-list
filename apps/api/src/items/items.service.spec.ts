@@ -75,6 +75,34 @@ describe('ItemsService', () => {
     );
   });
 
+  it('lists distinct item text suggestions matching query', async () => {
+    prisma.shoppingItem.findMany.mockResolvedValue([
+      { text: 'Whole milk', createdAt: new Date('2026-06-07T12:00:00.000Z') },
+      { text: 'Milk', createdAt: new Date('2026-06-07T11:00:00.000Z') },
+      { text: 'milk', createdAt: new Date('2026-06-07T10:00:00.000Z') },
+      { text: 'Almond milk', createdAt: new Date('2026-06-07T09:00:00.000Z') },
+    ]);
+
+    await expect(service.listSuggestions('family-1', 'mil')).resolves.toEqual([
+      'Whole milk',
+      'Milk',
+      'Almond milk',
+    ]);
+    expect(prisma.shoppingItem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          familyId: 'family-1',
+          text: { contains: 'mil', mode: 'insensitive' },
+        },
+      }),
+    );
+  });
+
+  it('returns no suggestions for queries shorter than 3 characters', async () => {
+    await expect(service.listSuggestions('family-1', 'mi')).resolves.toEqual([]);
+    expect(prisma.shoppingItem.findMany).not.toHaveBeenCalled();
+  });
+
   it('lists distinct family stores by recent use', async () => {
     prisma.shoppingItem.findMany.mockResolvedValue([
       { store: 'Lidl', completedAt: new Date('2026-06-07T12:00:00.000Z') },

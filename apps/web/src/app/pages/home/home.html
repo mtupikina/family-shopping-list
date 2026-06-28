@@ -10,16 +10,14 @@
     <p class="py-12 text-center text-sm text-gray-500">{{ 'HOME.FALLBACK' | translate }}</p>
   } @else {
     <div class="mx-auto flex max-w-2xl flex-col gap-4 pb-20">
-      <section class="flex items-center gap-2">
-        <ion-input
-          fill="outline"
-          class="mb-0 flex-1 [--border-color:#e5e7eb] [--border-radius:0.5rem]"
-          [placeholder]="'ITEMS.TEXT' | translate"
+      <section class="flex w-full items-center gap-2">
+        <app-new-item-input
+          class="block min-w-0 flex-1"
           [value]="newText()"
-          (ionInput)="onNewTextChange($any($event).detail.value ?? '')"
-          (keyup.enter)="addItem()"
-        ></ion-input>
-        <ion-button class="m-0" (click)="addItem()" [disabled]="!newText().trim()">
+          (valueChange)="onNewTextChange($event)"
+          (enter)="addItem()"
+        ></app-new-item-input>
+        <ion-button class="m-0 shrink-0" (click)="addItem()" [disabled]="!newText().trim()">
           <ion-icon slot="icon-only" icon="add-outline"></ion-icon>
         </ion-button>
       </section>

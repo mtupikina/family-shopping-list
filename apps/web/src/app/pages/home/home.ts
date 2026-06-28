@@ -4,7 +4,6 @@ import {
   IonButton,
   IonContent,
   IonIcon,
-  IonInput,
   IonModal,
   IonSpinner,
 } from '@ionic/angular/standalone';
@@ -29,6 +28,7 @@ import { ShoppingItem } from '../../types/items';
 import { groupActiveItems, parseOptionalNumber } from '../../utils/item-display.util';
 import { ItemEditSheetComponent } from '../../shared/app-item-edit-sheet/app-item-edit-sheet';
 import { ItemSectionComponent } from '../../shared/app-item-section/app-item-section';
+import { NewItemInputComponent } from '../../shared/app-new-item-input/app-new-item-input';
 import { ItemSheetFormValues, ItemSheetMode } from '../../types/itemSheet';
 import { DEFAULT_ITEM_UNIT } from '../../types/units';
 
@@ -39,7 +39,6 @@ import { DEFAULT_ITEM_UNIT } from '../../types/units';
     FormsModule,
     IonContent,
     IonSpinner,
-    IonInput,
     IonButton,
     IonIcon,
     IonModal,
@@ -47,6 +46,7 @@ import { DEFAULT_ITEM_UNIT } from '../../types/units';
     AppHeaderComponent,
     ItemSectionComponent,
     ItemEditSheetComponent,
+    NewItemInputComponent,
   ],
   templateUrl: './home.html',
 })

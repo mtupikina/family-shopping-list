@@ -1,0 +1,28 @@
+<div class="relative w-full">
+  <ion-input
+    fill="outline"
+    class="mb-0 w-full [--border-color:#e5e7eb] [--border-radius:0.5rem]"
+    [placeholder]="'ITEMS.TEXT' | translate"
+    autocomplete="off"
+    [value]="value()"
+    (ionInput)="onInput($any($event).detail.value ?? '')"
+    (ionFocus)="focused.set(true)"
+    (ionBlur)="onBlur()"
+    (keyup.enter)="enter.emit()"
+  ></ion-input>
+  @if (focused() && suggestions().length > 0) {
+    <div
+      class="absolute inset-x-0 top-full z-20 mt-1 flex flex-wrap gap-2 rounded-lg border border-gray-200 bg-white p-2 shadow-sm"
+    >
+      @for (suggestion of suggestions(); track suggestion) {
+        <ion-chip
+          class="m-0 cursor-pointer rounded-full border border-gray-200 bg-gray-50 px-3.5 py-1.5 text-sm text-gray-700 [--background:#f9fafb] [--color:#374151] hover:[--background:#eff6ff] hover:[--color:#1d4ed8] hover:border-blue-300"
+          (mousedown)="$event.preventDefault()"
+          (click)="pick(suggestion)"
+        >
+          {{ suggestion }}
+        </ion-chip>
+      }
+    </div>
+  }
+</div>

@@ -69,6 +69,30 @@ describe('ItemsService', () => {
     expect(service.findDuplicate('Bread')).toBeUndefined();
   });
 
+  it('suggests item texts from cache when offline', async () => {
+    connectivityMock.online.mockReturnValue(false);
+    service.mergeItem(sampleItem);
+    service.mergeItem({
+      ...sampleItem,
+      id: 'item-2',
+      text: 'Almond milk',
+      createdAt: '2026-06-07T11:00:00.000Z',
+    });
+
+    await expect(service.suggestItemTexts('mil')).resolves.toEqual(['Almond milk', 'Milk']);
+    expect(httpMock.get).not.toHaveBeenCalled();
+  });
+
+  it('loads item text suggestions from API when online', async () => {
+    httpMock.get.mockReturnValue(of(['Whole milk', 'Milk']));
+
+    await expect(service.suggestItemTexts('mil')).resolves.toEqual(['Whole milk', 'Milk']);
+    expect(httpMock.get).toHaveBeenCalledWith(
+      expect.stringContaining('/items/suggestions'),
+      expect.objectContaining({ params: { q: 'mil' } }),
+    );
+  });
+
   it('excludes archived items from activeItems', () => {
     service.mergeItem(sampleItem);
     service.mergeItem({ ...sampleItem, id: 'item-2', text: 'Bread', archived: true });
