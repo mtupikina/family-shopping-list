@@ -1,17 +1,47 @@
 <app-header titleKey="ARCHIVED.TITLE"></app-header>
 
 <ion-content class="ion-padding [--background:#fafafa]">
-  @if (loading()) {
-    <div class="flex min-h-full flex-col items-center justify-center gap-4 py-12">
-      <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p class="text-sm text-gray-500">{{ 'ARCHIVED.LOADING' | translate }}</p>
-    </div>
-  } @else if (error()) {
-    <p class="py-12 text-center text-sm text-gray-500">{{ 'ARCHIVED.ERROR' | translate }}</p>
-  } @else if (items().length === 0) {
-    <p class="py-12 text-center text-sm text-gray-400">{{ 'ARCHIVED.EMPTY' | translate }}</p>
-  } @else {
-    <div class="mx-auto max-w-2xl pb-20">
+  <div class="mx-auto max-w-2xl pb-20">
+    <button
+      type="button"
+      class="mb-4 flex w-full items-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-left shadow-sm"
+      (click)="openFilters()"
+    >
+      <ion-icon icon="filter-outline" class="shrink-0 text-xl text-primary ml-2"></ion-icon>
+      <div class="min-w-0 flex-1">
+        <p class="m-0 text-sm font-medium text-gray-900">{{ 'ARCHIVED.FILTERS.TITLE' | translate }}</p>
+        <p class="m-0 mt-0.5 mb-1.5 text-xs text-gray-500">
+          @if (activeFilterCount() > 0) {
+            {{ 'ARCHIVED.FILTERS.ACTIVE_COUNT' | translate: { count: activeFilterCount() } }}
+          } @else {
+            {{ 'ARCHIVED.FILTERS.SUBTITLE' | translate }}
+          }
+        </p>
+      </div>
+      @if (activeFilterCount() > 0) {
+        <ion-button
+          fill="clear"
+          size="small"
+          class="m-0 shrink-0"
+          (click)="clearFilters(); $event.stopPropagation()"
+        >
+          {{ 'ARCHIVED.FILTERS.CLEAR' | translate }}
+        </ion-button>
+      } @else {
+        <ion-icon icon="chevron-forward-outline" class="shrink-0 text-lg text-gray-400"></ion-icon>
+      }
+    </button>
+
+    @if (loading()) {
+      <div class="flex flex-col items-center justify-center gap-4 py-12">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p class="text-sm text-gray-500">{{ 'ARCHIVED.LOADING' | translate }}</p>
+      </div>
+    } @else if (error()) {
+      <p class="py-12 text-center text-sm text-gray-500">{{ 'ARCHIVED.ERROR' | translate }}</p>
+    } @else if (items().length === 0) {
+      <p class="py-12 text-center text-sm text-gray-400">{{ 'ARCHIVED.EMPTY' | translate }}</p>
+    } @else {
       <ion-list class="overflow-hidden rounded-xl border border-gray-200 bg-white p-0" lines="none">
         @for (item of items(); track item.id) {
           <app-item-row [item]="item" [readOnly]="true" [translateUnit]="translateUnit" />
@@ -24,6 +54,26 @@
           [loadingText]="'ARCHIVED.LOADING_MORE' | translate"
         ></ion-infinite-scroll-content>
       </ion-infinite-scroll>
-    </div>
-  }
+    }
+  </div>
 </ion-content>
+
+<ion-modal
+  [isOpen]="filtersOpen()"
+  [initialBreakpoint]="1"
+  [breakpoints]="[0, 1]"
+  (didDismiss)="closeFilters()"
+>
+  <ng-template>
+    <div class="h-full">
+      <app-archived-filters-sheet
+        [filters]="filters()"
+        [familyStores]="familyStores()"
+        (filterChange)="onFilterChange($event)"
+        (applyClick)="applyFilters()"
+        (clearClick)="clearFiltersInModal()"
+        (dismissClick)="closeFilters()"
+      />
+    </div>
+  </ng-template>
+</ion-modal>

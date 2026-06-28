@@ -69,7 +69,11 @@ export class ListArchivedItemsQueryDto {
 
   @IsOptional()
   @IsString()
-  price?: string;
+  priceMin?: string;
+
+  @IsOptional()
+  @IsString()
+  priceMax?: string;
 
   @IsOptional()
   @Type(() => Number)

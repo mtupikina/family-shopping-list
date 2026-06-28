@@ -21,6 +21,8 @@ Route-level pages may omit the `app-` folder prefix (e.g. `home/home.ts` → sel
 ## Rules
 
 - Use `templateUrl: './app-feature-name.html'` — never inline `template: \`...\``.
+- **Style with Tailwind in the HTML template** — never use `@Component({ styles: [...] })`, `styleUrls`, or separate `.scss` files for component styling.
+- For Ionic CSS variables, use Tailwind arbitrary properties on the element (e.g. `[--border-color:#e5e7eb] [--border-radius:0.5rem]`).
 - One `@Component` per `.ts` file. Do not combine multiple components in one file.
 - Shared types go in a dedicated `*.types.ts` file (e.g. `item-sheet.types.ts`), not in a component file.
 - **Folder name = file name = selector = HTML tag** (e.g. `app-item-section/` → `app-item-section.ts` → selector `app-item-section` → `<app-item-section>`). This makes tag-to-file navigation work in the IDE.

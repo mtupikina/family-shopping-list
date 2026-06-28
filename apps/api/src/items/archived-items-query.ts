@@ -82,7 +82,7 @@ export function buildArchivedItemsWhere(
   }
 
   if (query.store?.trim()) {
-    filters.push({ store: { contains: query.store.trim(), mode: 'insensitive' } });
+    filters.push({ store: { equals: query.store.trim(), mode: 'insensitive' } });
   }
 
   if (query.category?.trim()) {
@@ -94,16 +94,14 @@ export function buildArchivedItemsWhere(
   }
 
   if (query.rejectReason?.trim()) {
-    filters.push({ rejectReason: { contains: query.rejectReason.trim(), mode: 'insensitive' } });
+    filters.push({ rejectReason: { equals: query.rejectReason.trim(), mode: 'insensitive' } });
   }
 
   if (query.quantity?.trim()) {
     filters.push({ quantity: query.quantity.trim() });
   }
 
-  if (query.price?.trim()) {
-    filters.push({ price: query.price.trim() });
-  }
+  appendPriceFilter(filters, query.priceMin, query.priceMax);
 
   if (query.version != null) {
     filters.push({ version: query.version });
@@ -203,6 +201,27 @@ export function decodeArchivedListCursor(
     };
   } catch {
     throw new BadRequestException('Invalid cursor');
+  }
+}
+
+function appendPriceFilter(
+  filters: Prisma.ShoppingItemWhereInput[],
+  priceMin?: string,
+  priceMax?: string,
+): void {
+  const range: { gte?: string; lte?: string } = {};
+  const min = priceMin?.trim();
+  const max = priceMax?.trim();
+
+  if (min) {
+    range.gte = min;
+  }
+  if (max) {
+    range.lte = max;
+  }
+
+  if (Object.keys(range).length > 0) {
+    filters.push({ price: range });
   }
 }
 

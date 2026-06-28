@@ -19,7 +19,7 @@ describe('archived-items-query', () => {
         { familyId: 'family-1', archived: true, archivedAt: { not: null } },
         { status: ItemStatus.COMPLETED },
         { text: { contains: 'cheese', mode: 'insensitive' } },
-        { store: { contains: 'lidl', mode: 'insensitive' } },
+        { store: { equals: 'lidl', mode: 'insensitive' } },
       ],
     });
   });
@@ -39,6 +39,20 @@ describe('archived-items-query', () => {
             lte: new Date('2026-06-30T23:59:59.999Z'),
           },
         },
+      ],
+    });
+  });
+
+  it('builds price range filters', () => {
+    const where = buildArchivedItemsWhere('family-1', {
+      priceMin: '10',
+      priceMax: '50',
+    });
+
+    expect(where).toEqual({
+      AND: [
+        { familyId: 'family-1', archived: true, archivedAt: { not: null } },
+        { price: { gte: '10', lte: '50' } },
       ],
     });
   });

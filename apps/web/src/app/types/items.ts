@@ -100,7 +100,8 @@ export interface ListArchivedItemsQuery {
   unit?: string;
   rejectReason?: string;
   quantity?: string;
-  price?: string;
+  priceMin?: string;
+  priceMax?: string;
   version?: number;
   createdById?: string;
   rejectedById?: string;
