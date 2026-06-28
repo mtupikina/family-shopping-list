@@ -61,6 +61,12 @@ describe('item-display.util', () => {
     expect(itemStatusClass({ ...baseItem, status: 'REJECTED' })).toContain('text-red-400');
   });
 
+  it('omits strikethrough when disabled', () => {
+    expect(itemStatusClass({ ...baseItem, status: 'COMPLETED' }, false)).not.toContain('line-through');
+    expect(itemStatusClass({ ...baseItem, status: 'REJECTED' }, false)).not.toContain('line-through');
+    expect(itemStatusClass({ ...baseItem, status: 'COMPLETED' }, false)).toContain('text-gray-800');
+  });
+
   it('guards complete and reject actions', () => {
     expect(canCompleteItem(baseItem)).toBe(true);
     expect(canRejectItem(baseItem)).toBe(true);

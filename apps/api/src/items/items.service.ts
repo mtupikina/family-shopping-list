@@ -4,9 +4,22 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ItemEventsService } from './item-events.service';
 import { CompleteItemDto } from './dto/complete-item.dto';
 import { CreateItemDto } from './dto/create-item.dto';
+import { ListArchivedItemsQueryDto } from './dto/list-archived-items.dto';
 import { RejectItemDto } from './dto/reject-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
-import { ListItemsQuery, ShoppingItemResponse } from './items.types';
+import {
+  ArchivedItemSortField,
+  buildArchivedItemsOrderBy,
+  buildArchivedItemsWhere,
+  decodeArchivedListCursor,
+  encodeArchivedListCursor,
+  getArchivedSortValue,
+} from './archived-items-query';
+import {
+  ArchivedItemsPageResponse,
+  ListItemsQuery,
+  ShoppingItemResponse,
+} from './items.types';
 
 type ItemWithMembers = ShoppingItem & {
   createdBy: { id: string; username: string };
@@ -45,6 +58,39 @@ export class ItemsService {
     });
 
     return items.map(item => this.toResponse(item));
+  }
+
+  async listArchived(
+    familyId: string,
+    query: ListArchivedItemsQueryDto = {},
+  ): Promise<ArchivedItemsPageResponse> {
+    const limit = Math.min(Math.max(query.limit ?? 30, 1), 100);
+    const sortBy: ArchivedItemSortField = query.sortBy ?? 'archivedAt';
+    const sortOrder = query.sortOrder ?? 'desc';
+    const cursor = query.cursor ? decodeArchivedListCursor(query.cursor, sortBy) : undefined;
+
+    const items = await this.prisma.shoppingItem.findMany({
+      where: buildArchivedItemsWhere(familyId, query, cursor),
+      include: itemInclude,
+      orderBy: buildArchivedItemsOrderBy(sortBy, sortOrder),
+      take: limit + 1,
+    });
+
+    const hasMore = items.length > limit;
+    const page = hasMore ? items.slice(0, limit) : items;
+    const last = page.at(-1);
+
+    return {
+      items: page.map(item => this.toResponse(item)),
+      nextCursor:
+        hasMore && last
+          ? encodeArchivedListCursor({
+              sortBy,
+              sortValue: getArchivedSortValue(last, sortBy),
+              id: last.id,
+            })
+          : null,
+    };
   }
 
   async listStores(familyId: string): Promise<string[]> {

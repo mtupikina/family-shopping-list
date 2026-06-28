@@ -17,6 +17,7 @@ import { CompleteItemDto } from './dto/complete-item.dto';
 import { CreateItemDto } from './dto/create-item.dto';
 import { RejectItemDto } from './dto/reject-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
+import { ListArchivedItemsQueryDto } from './dto/list-archived-items.dto';
 import { ItemEventsService } from './item-events.service';
 import { ItemsService } from './items.service';
 
@@ -43,6 +44,11 @@ export class ItemsController {
   @Get('stores')
   listStores(@CurrentUser() user: JwtMemberPayload) {
     return this.itemsService.listStores(user.familyId);
+  }
+
+  @Get('archived')
+  listArchived(@CurrentUser() user: JwtMemberPayload, @Query() query: ListArchivedItemsQueryDto) {
+    return this.itemsService.listArchived(user.familyId, query);
   }
 
   @Post()

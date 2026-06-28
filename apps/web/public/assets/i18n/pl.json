@@ -94,8 +94,16 @@
       "GOT_ELSEWHERE": "Kupione gdzie indziej"
     }
   },
+  "ARCHIVED": {
+    "TITLE": "Zarchiwizowane produkty",
+    "LOADING": "Ładowanie...",
+    "EMPTY": "Brak zarchiwizowanych produktów.",
+    "ERROR": "Nie udało się załadować zarchiwizowanych produktów. Spróbuj ponownie.",
+    "LOADING_MORE": "Ładowanie kolejnych..."
+  },
   "HEADER": {
     "HOME": "Strona główna",
+    "ARCHIVED": "Zarchiwizowane produkty",
     "FAMILY": "Rodzina",
     "SIGN_OUT": "Wyloguj się",
     "STATUS": {

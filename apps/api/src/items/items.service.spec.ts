@@ -85,6 +85,54 @@ describe('ItemsService', () => {
     await expect(service.listStores('family-1')).resolves.toEqual(['Lidl', 'Biedronka']);
   });
 
+  it('lists archived items with cursor pagination', async () => {
+    const archivedAt = new Date('2026-06-07T12:00:00.000Z');
+    prisma.shoppingItem.findMany.mockResolvedValue([
+      { ...baseItem, id: 'item-1', archived: true, archivedAt },
+      { ...baseItem, id: 'item-2', archived: true, archivedAt },
+      { ...baseItem, id: 'item-3', archived: true, archivedAt },
+    ]);
+
+    const result = await service.listArchived('family-1', { limit: 2 });
+
+    expect(result.items).toHaveLength(2);
+    expect(result.nextCursor).toBeTruthy();
+    expect(prisma.shoppingItem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          familyId: 'family-1',
+          archived: true,
+        }),
+        orderBy: [{ archivedAt: 'desc' }, { id: 'desc' }],
+        take: 3,
+      }),
+    );
+  });
+
+  it('lists archived items with filters and custom sort', async () => {
+    prisma.shoppingItem.findMany.mockResolvedValue([baseItem]);
+
+    await service.listArchived('family-1', {
+      text: 'Milk',
+      status: ItemStatus.NEW,
+      sortBy: 'text',
+      sortOrder: 'asc',
+    });
+
+    expect(prisma.shoppingItem.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: {
+          AND: [
+            { familyId: 'family-1', archived: true, archivedAt: { not: null } },
+            { status: ItemStatus.NEW },
+            { text: { contains: 'Milk', mode: 'insensitive' } },
+          ],
+        },
+        orderBy: [{ text: 'asc' }, { id: 'asc' }],
+      }),
+    );
+  });
+
   it('creates an item and publishes event', async () => {
     prisma.shoppingItem.create.mockResolvedValue(baseItem);
 

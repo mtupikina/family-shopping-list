@@ -20,6 +20,7 @@ import { ShoppingItem } from '../../types/items';
 export class ItemRowComponent {
   readonly item = input.required<ShoppingItem>();
   readonly archiveMode = input(false);
+  readonly readOnly = input(false);
   readonly selected = input(false);
   readonly translateUnit = input.required<(key: string) => string>();
 
@@ -30,7 +31,7 @@ export class ItemRowComponent {
 
   readonly title = computed(() => itemTitle(this.item(), this.translateUnit()));
   readonly meta = computed(() => itemMeta(this.item()));
-  readonly titleClass = computed(() => itemStatusClass(this.item()));
+  readonly titleClass = computed(() => itemStatusClass(this.item(), !this.readOnly()));
   readonly canComplete = computed(() => canCompleteItem(this.item()));
 
   constructor() {

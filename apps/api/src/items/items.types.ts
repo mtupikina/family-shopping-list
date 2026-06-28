@@ -32,3 +32,8 @@ export interface ListItemsQuery {
   updatedSince?: Date;
   includeArchived?: boolean;
 }
+
+export interface ArchivedItemsPageResponse {
+  items: ShoppingItemResponse[];
+  nextCursor: string | null;
+}

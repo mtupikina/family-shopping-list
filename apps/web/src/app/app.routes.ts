@@ -38,6 +38,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/family/family').then(m => m.FamilyComponent),
   },
   {
+    path: 'archived',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/archived/archived').then(m => m.ArchivedComponent),
+  },
+  {
     path: '',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/home/home').then(m => m.HomeComponent),

@@ -5,6 +5,10 @@ import { environment } from '../../environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { ConnectivityService } from './connectivity.service';
 import {
+  ArchivedItemsPage,
+  ARCHIVED_ITEMS_PAGE_SIZE,
+  DEFAULT_ARCHIVED_ITEMS_QUERY,
+  ListArchivedItemsQuery,
   CompleteItemPayload,
   CreateItemPayload,
   ITEMS_CACHE_KEY,
@@ -264,6 +268,39 @@ export class ItemsService {
     return this.activeItems().find(
       item => item.status === 'NEW' && item.text.trim().toLowerCase() === normalized,
     );
+  }
+
+  async loadArchivedPage(query: ListArchivedItemsQuery = {}): Promise<ArchivedItemsPage | null> {
+    if (!this.connectivity.online()) {
+      return null;
+    }
+
+    try {
+      const params = this.buildArchivedQueryParams({
+        limit: ARCHIVED_ITEMS_PAGE_SIZE,
+        ...DEFAULT_ARCHIVED_ITEMS_QUERY,
+        ...query,
+      });
+
+      return await firstValueFrom(
+        this.http.get<ArchivedItemsPage>(`${environment.apiBaseUrl}/items/archived`, { params }),
+      );
+    } catch {
+      return null;
+    }
+  }
+
+  private buildArchivedQueryParams(query: ListArchivedItemsQuery): Record<string, string> {
+    const params: Record<string, string> = {};
+
+    for (const [key, value] of Object.entries(query)) {
+      if (value == null || value === '') {
+        continue;
+      }
+      params[key] = String(value);
+    }
+
+    return params;
   }
 
   mergeItem(item: ShoppingItem): void {

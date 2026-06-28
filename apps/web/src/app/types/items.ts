@@ -64,3 +64,65 @@ export type QueuedItemAction =
 export const ITEMS_CACHE_KEY = 'fsl_items_cache';
 export const ITEMS_QUEUE_KEY = 'fsl_items_queue';
 export const ITEMS_LAST_UPDATED_KEY = 'fsl_items_last_updated';
+
+export interface ArchivedItemsPage {
+  items: ShoppingItem[];
+  nextCursor: string | null;
+}
+
+export const ARCHIVED_ITEMS_PAGE_SIZE = 30;
+
+export type ArchivedItemSortField =
+  | 'archivedAt'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'completedAt'
+  | 'rejectedAt'
+  | 'text'
+  | 'status'
+  | 'store'
+  | 'category'
+  | 'unit'
+  | 'quantity'
+  | 'price'
+  | 'rejectReason'
+  | 'version';
+
+export interface ListArchivedItemsQuery {
+  limit?: number;
+  cursor?: string;
+  sortBy?: ArchivedItemSortField;
+  sortOrder?: 'asc' | 'desc';
+  status?: ItemStatus;
+  text?: string;
+  store?: string;
+  category?: string;
+  unit?: string;
+  rejectReason?: string;
+  quantity?: string;
+  price?: string;
+  version?: number;
+  createdById?: string;
+  rejectedById?: string;
+  completedById?: string;
+  archivedAt?: string;
+  archivedAtFrom?: string;
+  archivedAtTo?: string;
+  createdAt?: string;
+  createdAtFrom?: string;
+  createdAtTo?: string;
+  updatedAt?: string;
+  updatedAtFrom?: string;
+  updatedAtTo?: string;
+  completedAt?: string;
+  completedAtFrom?: string;
+  completedAtTo?: string;
+  rejectedAt?: string;
+  rejectedAtFrom?: string;
+  rejectedAtTo?: string;
+}
+
+export const DEFAULT_ARCHIVED_ITEMS_QUERY: ListArchivedItemsQuery = {
+  sortBy: 'archivedAt',
+  sortOrder: 'desc',
+};

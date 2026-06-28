@@ -94,8 +94,16 @@
       "GOT_ELSEWHERE": "Got it elsewhere"
     }
   },
+  "ARCHIVED": {
+    "TITLE": "Archived items",
+    "LOADING": "Loading...",
+    "EMPTY": "No archived items.",
+    "ERROR": "Could not load archived items. Please try again.",
+    "LOADING_MORE": "Loading more..."
+  },
   "HEADER": {
     "HOME": "Home",
+    "ARCHIVED": "Archived items",
     "FAMILY": "Family",
     "SIGN_OUT": "Sign out",
     "STATUS": {

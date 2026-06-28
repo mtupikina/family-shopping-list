@@ -50,8 +50,11 @@ export function itemMeta(item: ShoppingItem): string | null {
   return null;
 }
 
-export function itemStatusClass(item: ShoppingItem): string {
+export function itemStatusClass(item: ShoppingItem, strikethrough = true): string {
   const base = 'text-[0.9375rem] leading-[1.35]';
+  if (!strikethrough) {
+    return `${base} text-gray-800`;
+  }
   if (item.status === 'COMPLETED') {
     return `${base} text-gray-400 line-through`;
   }

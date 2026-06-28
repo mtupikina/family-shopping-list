@@ -13,7 +13,7 @@ import {
   MenuController,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { homeOutline, peopleOutline, logOutOutline } from 'ionicons/icons';
+import { homeOutline, archiveOutline, peopleOutline, logOutOutline } from 'ionicons/icons';
 import { TranslatePipe } from '@ngx-translate/core';
 
 import { AuthService } from '../../auth/auth.service';
@@ -55,7 +55,7 @@ export class AppMenuComponent {
   });
 
   constructor() {
-    addIcons({ homeOutline, peopleOutline, logOutOutline });
+    addIcons({ homeOutline, archiveOutline, peopleOutline, logOutOutline });
   }
 
   async closeMenu(): Promise<void> {
